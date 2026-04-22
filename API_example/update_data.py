@@ -24,7 +24,7 @@ def update_energy_data(new_data):
     
     # --- 修正ポイント：施設IDをパスに組み込む ---
     facility_id = new_data.get('id', 'UNKNOWN_FACILITY')
-    csv_path = f"data/archive/{facility_id}/{year_str}/{month_str}.csv"
+    csv_path = f"docs/data/archive/{facility_id}/{year_str}/{month_str}.csv"
     # ------------------------------------------
 
     csv_line = f"{new_data['time']},{new_data['id']},{new_data['room']},{new_data['mac_addr']},{new_data['status']},{new_data['power_w']},{new_data['ble_rssi']},{new_data['node_rssi']}\n"
@@ -40,7 +40,7 @@ def update_energy_data(new_data):
         repo.create_file(csv_path, f"Create new log for {facility_id}", CSV_HEADER + csv_line)
 
     # 2. latest.json の更新
-    json_path = "data/latest.json"
+    json_path = "docs/data/latest.json"
     try:
         contents = repo.get_contents(json_path)
         latest_list = json.loads(contents.decoded_content.decode("utf-8"))
