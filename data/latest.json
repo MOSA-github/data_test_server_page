@@ -1,0 +1,11 @@
+{
+  "device_id": "monitor-01",
+  "timestamp": "2026-04-22T19:20:00Z",
+  "power_consumption": {
+    "voltage": 100.2,
+    "current": 1.5,
+    "wattage": 150.3,
+    "unit": "W"
+  },
+  "status": "online"
+}
