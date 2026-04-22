@@ -1,32 +1,32 @@
 [
   {
-    "time": "2026-04-23 07:42:00",
+    "time": "2026-04-23 07:45:00",
     "id": "HOSP-0001",
     "room": "Room_301_Bed_A",
     "mac_addr": "f0:9e:9e:9e:29:16",
     "status": "0W_ALERT",
     "power_w": 0.0,
-    "ble_rssi": -70,
+    "ble_rssi": -65,
     "node_rssi": -73
   },
   {
-    "time": "2026-04-23 07:42:00",
+    "time": "2026-04-23 07:45:00",
     "id": "HOSP-0001",
     "room": "Room_301_Bed_B",
     "mac_addr": "f0:9e:9e:9c:e0:3a",
     "status": "NORMAL",
-    "power_w": 5.8,
-    "ble_rssi": -60,
-    "node_rssi": -71
+    "power_w": 7.4,
+    "ble_rssi": -59,
+    "node_rssi": -72
   },
   {
-    "time": "2026-04-23 07:42:00",
+    "time": "2026-04-23 07:45:00",
     "id": "HOSP-0001",
     "room": "Room_302_Bed_A",
     "mac_addr": "f0:9e:9e:9e:07:7e",
     "status": "NORMAL",
     "power_w": 1.3,
-    "ble_rssi": -20,
-    "node_rssi": -74
+    "ble_rssi": -21,
+    "node_rssi": -72
   }
 ]
