@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENERGY MONITOR | Real-time Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+        body {
+            background-color: #0a0a0c;
+            color: #00ff41; /* マトリックス・グリーン */
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: #00ff41;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+        }
+        .status-normal { color: #00ff41; }
+        .status-unknown { color: #ffae00; }
+        .status-error { color: #ff0055; }
+    </style>
+</head>
+<body class="p-8">
+    <header class="mb-12 border-b border-green-900 pb-4 flex justify-between items-end">
+        <div>
+            <h1 class="text-4xl font-bold tracking-tighter">ENERGY_MONITOR_v1.0</h1>
+            <p class="text-sm opacity-60">SYSTEM STATUS: <span id="sys-status">SCANNING...</span></p>
+        </div>
+        <div id="clock" class="text-xl opacity-80"></div>
+    </header>
+
+    <main id="dashboard" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        </main>
+
+    <script>
+        const DATA_URL = '../data/latest.json';
+
+        async function updateDashboard() {
+            try {
+                const response = await fetch(DATA_URL + '?t=' + Date.now()); // キャッシュ回避
+                const data = await response.json();
+                const container = document.getElementById('dashboard');
+                container.innerHTML = '';
+
+                data.forEach(node => {
+                    const statusClass = `status-${node.status.toLowerCase()}`;
+                    const card = `
+                        <div class="glass-card p-6 rounded-lg">
+                            <div class="flex justify-between mb-4">
+                                <span class="text-xs opacity-50">[ ${node.id} ]</span>
+                                <span class="text-xs ${statusClass} font-bold">● ${node.status}</span>
+                            </div>
+                            <h2 class="text-2xl font-bold mb-2 text-white">${node.room}</h2>
+                            <div class="grid grid-cols-2 gap-4 mt-6">
+                                <div>
+                                    <p class="text-[10px] uppercase opacity-50">Power Usage</p>
+                                    <p class="text-3xl font-bold text-white">${node.power_w}<span class="text-sm ml-1 text-green-500">W</span></p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] uppercase opacity-50">Signal (RSSI)</p>
+                                    <p class="text-xl text-white">${node.node_rssi} <span class="text-xs opacity-50">dBm</span></p>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-800 text-[10px] opacity-40">
+                                LAST UPDATED: ${node.time}
+                            </div>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', card);
+                });
+                document.getElementById('sys-status').innerText = 'OPERATIONAL';
+            } catch (e) {
+                console.error("Data fetch failed", e);
+                document.getElementById('sys-status').innerText = 'OFFLINE / ERROR';
+            }
+        }
+
+        // 10秒ごとに更新
+        setInterval(updateDashboard, 10000);
+        updateDashboard();
+
+        // 時計表示
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+    </script>
+</body>
+</html>
