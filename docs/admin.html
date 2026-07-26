@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>管理者画面 | MOSAdemy Monitor</title><link rel="stylesheet" href="assets/app.css">
+</head>
+<body data-page="admin">
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="brand-mark">M</span><span>MOSAdemy Monitor</span></a>
+    <nav class="topnav"><a href="index.html">病院一覧</a><a class="active" href="admin.html">管理者画面</a></nav>
+  </header>
+  <main class="page-shell">
+    <div class="page-heading">
+      <div><p class="eyebrow">ADMINISTRATION</p><h1>施設・ID管理</h1><p class="lead">病院と、その病院に紐づくセンサ・カメラIDを管理します。</p></div>
+      <button id="newHospital" class="button primary" type="button">＋ 病院を登録</button>
+    </div>
+    <div class="admin-note"><strong>GitHub Pagesモード</strong><span>変更はこのブラウザに保存されます。運用データへ反映する場合はJSONを書き出してください。</span><button id="exportData" class="text-button">JSONを書き出す</button></div>
+    <section class="panel">
+      <div class="panel-heading"><div><h2>登録病院</h2><p class="muted"><span id="adminCount">0</span>件</p></div><input id="adminSearch" class="compact-search" type="search" placeholder="病院名・IDを検索"></div>
+      <div class="table-wrap"><table><thead><tr><th>施設ID</th><th>病院名</th><th>地域</th><th>設備ID</th><th>状態</th><th></th></tr></thead><tbody id="adminRows"></tbody></table></div>
+    </section>
+  </main>
+  <dialog id="editorDialog">
+    <form id="hospitalForm" method="dialog">
+      <div class="dialog-heading"><div><p class="eyebrow">FACILITY EDITOR</p><h2 id="dialogTitle">病院を登録</h2></div><button class="icon-button" value="cancel" aria-label="閉じる">×</button></div>
+      <div class="form-grid">
+        <label><span>施設ID *</span><input name="id" required pattern="[A-Za-z0-9_-]+"></label>
+        <label><span>病院名 *</span><input name="name" required></label>
+        <label><span>都道府県</span><input name="prefecture" value="岡山県"></label>
+        <label><span>市区町村</span><input name="city" value="岡山市"></label>
+        <label class="wide"><span>住所</span><input name="address"></label>
+        <label><span>状態</span><select name="status"><option value="normal">正常</option><option value="warning">要確認</option><option value="offline">オフライン</option></select></label>
+      </div>
+      <div class="subeditor">
+        <div class="panel-heading"><div><h3>設備ID</h3><p class="muted">電力センサ・カメラを登録します</p></div><button id="addDevice" class="button secondary small" type="button">＋ IDを追加</button></div>
+        <div id="deviceRows"></div>
+      </div>
+      <div class="dialog-actions"><button id="deleteHospital" class="button danger" type="button">この病院を削除</button><span></span><button class="button secondary" value="cancel">キャンセル</button><button class="button primary" value="save">保存</button></div>
+    </form>
+  </dialog>
+  <script src="assets/app.js"></script>
+</body>
+</html>

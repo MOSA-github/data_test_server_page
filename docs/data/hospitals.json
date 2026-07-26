@@ -1,0 +1,9 @@
+[
+  {"id":"HOSP-0001","name":"HOSP-0001 病院","prefecture":"岡山県","city":"岡山市","address":"","status":"warning","devices":[
+    {"id":"f0:9e:9e:9e:29:16","name":"Room_301_Bed_A","type":"power"},
+    {"id":"f0:9e:9e:9c:e0:3a","name":"Room_301_Bed_B","type":"power"},
+    {"id":"f0:9e:9e:9e:07:7e","name":"Room_302_Bed_A","type":"power"}
+  ]},
+  {"id":"HOSPITAL_A","name":"HOSPITAL_A","prefecture":"岡山県","city":"岡山市","address":"","status":"normal","devices":[]},
+  {"id":"HOSPITAL_B","name":"HOSPITAL_B","prefecture":"岡山県","city":"岡山市","address":"","status":"offline","devices":[]}
+]
