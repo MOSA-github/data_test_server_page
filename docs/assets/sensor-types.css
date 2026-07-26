@@ -23,6 +23,40 @@
   background: #e2f4ed;
 }
 
+.no-data-card {
+  grid-column: 1 / -1;
+  min-height: 150px;
+  display: grid;
+  place-content: center;
+  gap: 6px;
+  text-align: center;
+  color: var(--muted);
+  border: 1px dashed #bdc9c4;
+  border-radius: 11px;
+  background: var(--surface-2);
+}
+
+.no-data-card strong {
+  color: var(--ink);
+  font-size: 18px;
+}
+
+.no-data-card p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.no-data-value {
+  color: var(--muted);
+  font-size: 20px !important;
+}
+
+.no-data-inline {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+}
+
 @media (max-width: 850px) {
   .metric-grid {
     grid-template-columns: repeat(2, 1fr);
