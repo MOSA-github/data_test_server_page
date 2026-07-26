@@ -1,5 +1,8 @@
 # Energy Monitor Cloud
 
+本体は従来どおりGitHub Pagesだけで動作します。DB・認証が必要な場合だけ、独立した任意拡張
+[`extensions/data_server`](extensions/data_server/README.md) を使用します。
+
 ## 🌐 ダッシュボード
 [https://mosa-github.github.io/data_test_server_page/](https://mosa-github.github.io/data_test_server_page/)
 
