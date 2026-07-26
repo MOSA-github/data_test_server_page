@@ -1,0 +1,30 @@
+.metric-grid {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.sensor-kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.sensor-kinds span {
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: #95a19c;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.sensor-kinds span.registered {
+  color: var(--brand);
+  background: #e2f4ed;
+}
+
+@media (max-width: 850px) {
+  .metric-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

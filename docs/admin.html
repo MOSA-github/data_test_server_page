@@ -11,7 +11,7 @@
   </header>
   <main class="page-shell">
     <div class="page-heading">
-      <div><p class="eyebrow">ADMINISTRATION</p><h1>施設・ID管理</h1><p class="lead">病院と、その病院に紐づくセンサ・カメラIDを管理します。</p></div>
+      <div><p class="eyebrow">ADMINISTRATION</p><h1>施設・ID管理</h1><p class="lead">病院と、水位・電力・発電機・カメラの全IDを管理します。</p></div>
       <button id="newHospital" class="button primary" type="button">＋ 病院を登録</button>
     </div>
     <div class="admin-note"><strong>GitHub Pagesモード</strong><span>変更はこのブラウザに保存されます。運用データへ反映する場合はJSONを書き出してください。</span><button id="exportData" class="text-button">JSONを書き出す</button></div>
@@ -32,7 +32,7 @@
         <label><span>状態</span><select name="status"><option value="normal">正常</option><option value="warning">要確認</option><option value="offline">オフライン</option></select></label>
       </div>
       <div class="subeditor">
-        <div class="panel-heading"><div><h3>設備ID</h3><p class="muted">電力センサ・カメラを登録します</p></div><button id="addDevice" class="button secondary small" type="button">＋ IDを追加</button></div>
+        <div class="panel-heading"><div><h3>設備ID</h3><p class="muted">水位・電力・発電機・カメラのIDを登録します</p></div><button id="addDevice" class="button secondary small" type="button">＋ IDを追加</button></div>
         <div id="deviceRows"></div>
       </div>
       <div class="dialog-actions"><button id="deleteHospital" class="button danger" type="button">この病院を削除</button><span></span><button class="button secondary" value="cancel">キャンセル</button><button class="button primary" value="save">保存</button></div>

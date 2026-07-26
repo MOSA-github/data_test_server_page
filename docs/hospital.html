@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>病院管理 | MOSAdemy Monitor</title><link rel="stylesheet" href="assets/app.css">
+  <title>病院管理 | MOSAdemy Monitor</title><link rel="stylesheet" href="assets/app.css"><link rel="stylesheet" href="assets/sensor-types.css">
 </head>
 <body data-page="hospital">
   <header class="topbar">
@@ -17,7 +17,9 @@
     </div>
     <div class="tabs" role="tablist" aria-label="病院データ">
       <button class="tab active" data-tab="overview" role="tab">概要</button>
+      <button class="tab" data-tab="water" role="tab">貯水・水位</button>
       <button class="tab" data-tab="power" role="tab">消費電力</button>
+      <button class="tab" data-tab="generator" role="tab">発電機</button>
       <button class="tab" data-tab="camera" role="tab">カメラ</button>
     </div>
     <section id="overviewPanel" class="tab-panel">
@@ -27,8 +29,14 @@
         <article class="panel"><div class="panel-heading"><h2>施設情報</h2></div><dl id="facilityDetails" class="detail-list"></dl></article>
       </div>
     </section>
+    <section id="waterPanel" class="tab-panel" hidden>
+      <div class="panel"><div class="panel-heading"><div><h2>貯水・水位センサ</h2><p class="muted">貯水槽やタンクの水位情報</p></div></div><div id="waterCards" class="power-grid"></div></div>
+    </section>
     <section id="powerPanel" class="tab-panel" hidden>
       <div class="panel"><div class="panel-heading"><div><h2>消費電力</h2><p class="muted">センサごとの最新値</p></div><span class="data-note">10秒ごとに更新</span></div><div id="powerCards" class="power-grid"></div></div>
+    </section>
+    <section id="generatorPanel" class="tab-panel" hidden>
+      <div class="panel"><div class="panel-heading"><div><h2>発電機センサ</h2><p class="muted">非常用発電機の燃料残量・運転状態</p></div></div><div id="generatorCards" class="power-grid"></div></div>
     </section>
     <section id="cameraPanel" class="tab-panel" hidden>
       <div class="panel"><div class="panel-heading"><div><h2>監視カメラ</h2><p class="muted">この病院に登録されたカメラ</p></div></div><div id="cameraGrid" class="camera-grid"></div></div>

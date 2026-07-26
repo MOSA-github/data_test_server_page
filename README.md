@@ -9,8 +9,8 @@
 ### 画面
 
 - `index.html`: 病院の検索・状態／地域絞り込み
-- `hospital.html?id=<施設ID>`: 病院概要、消費電力、カメラ
-- `admin.html`: 病院・施設ID・センサ／カメラIDの登録・編集
+- `hospital.html?id=<施設ID>`: 病院概要、水位、消費電力、発電機、カメラ
+- `admin.html`: 病院・施設ID・水位／電力／発電機／カメラIDの登録・編集
 
 GitHub Pages版の管理変更はブラウザ内へ保存されます。管理画面からJSONを書き出し、
 レビュー後に`docs/data/hospitals.json`へ反映してください。サーバ側の共有保存とログインが必要な運用では、
