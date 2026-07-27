@@ -53,6 +53,7 @@
     "updated_at": "2026-07-27T09:00:00+09:00",
     "facility": {"id": "HOSP-0001", "name": "岡山大学病院", "type": "hospital"},
     "tags": ["dummy", "camera"],
+    "view_url": "https://unused-dreamily-isolation.ngrok-free.dev/camera/view/1",
     "is_dummy": true
   },
   {

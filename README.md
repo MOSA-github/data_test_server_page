@@ -67,11 +67,11 @@ Webから参照するデータはすべて`docs/data/`配下に置きます。
         "unit": "%"
       },
       {
-        "id": "camera_hosp0001_01",
-        "name": "救急入口",
+        "id": "1",
+        "name": "テストカメラ 1",
         "type": "camera",
         "status": "normal",
-        "image_url": "/assets/images/camera_er_entrance.png"
+        "view_url": "https://unused-dreamily-isolation.ngrok-free.dev/camera/view/1"
       }
     ]
   }
@@ -103,6 +103,7 @@ Webから参照するデータはすべて`docs/data/`配下に置きます。
 | `value` | number/string/null | 任意 | 現在値。数値`0`は有効な値として扱う |
 | `unit` | string | 任意 | 値の単位。既定値は種別ごとに異なる |
 | `image_url` | string | カメラのみ任意 | 同一originの相対URLまたは許可済みHTTPS URL |
+| `view_url` | string | カメラのみ任意 | ngrokカメラの自動更新ビューURL |
 | `updated_at` | ISO 8601 string | 任意 | センサ側の最終更新日時。timezoneを含める |
 
 #### センサ種別と単位
@@ -112,7 +113,7 @@ Webから参照するデータはすべて`docs/data/`配下に置きます。
 | `water` | 貯水・水位 | `%` | 貯水率、水位率 |
 | `power` | 消費電力 | `W` | 瞬時電力。既存最新値は`latest.json`から取得 |
 | `generator` | 発電機 | `%` | 燃料残量など、データ提供側で意味を明示する |
-| `camera` | カメラ | なし | 映像URLと接続状態 |
+| `camera` | カメラ | なし | `view_url`による自動更新映像と接続状態 |
 
 `value`や対象設備が存在しない場合、値を推測して補完せず「データなし」と表示します。`0`は欠損ではありません。
 また、`W`と`Wh`、`kW`と`kWh`を混同しないでください。
@@ -215,13 +216,47 @@ hospitals.json[].devices[].id
 ### 6. 管理画面と保存
 
 GitHub Pagesはサーバ側書込みを行えないため、`admin.html`の変更はブラウザの
-`localStorage`（key: `mosademy_hospitals_v2`）へ保存されます。
+`localStorage`（key: `mosademy_hospitals_v3`）へ保存されます。
 
 1. 管理者画面で病院と設備IDを登録・編集する。
 2. 「JSONを書き出す」で`hospitals.json`をダウンロードする。
 3. JSONのID、種別、状態、値、単位をレビューする。
 4. `docs/data/hospitals.json`を置換してcommit・pushする。
 5. GitHub Pages deploymentの成功と公開画面を確認する。
+
+### 7. ngrokカメラ連携
+
+現在のテスト接続先は次です。
+
+```text
+https://unused-dreamily-isolation.ngrok-free.dev/camera/view/1
+```
+
+岡山大学病院のCamera ID `1`へ`view_url`として登録しています。病院詳細の「カメラ」タブでは、
+この自動更新ビューをiframeで表示します。将来の病院別URLは次の形式を想定しています。
+
+```text
+https://unused-dreamily-isolation.ngrok-free.dev/hospital_001/camera/view/1
+```
+
+安全上、現在の画面がiframeへ読み込むのはHTTPSかつ
+`unused-dreamily-isolation.ngrok-free.dev`の`/camera/view/<id>`または
+`/<hospital_id>/camera/view/<id>`だけです。任意URL proxyは使用しません。
+
+ngrok無料トンネルでは初回アクセス時に確認画面が表示されることがあります。その場合はカメラカードの
+「別タブでカメラを開く」を選択して接続を許可し、病院詳細を再読み込みしてください。トンネル停止中、
+Camera ID未登録、画像未受信の場合はカメラサーバ側のエラー表示になります。
+
+添付のカメラモジュールでは次のrouteが提供されています。
+
+| route | 内容 |
+|---|---|
+| `/camera/view/<id>` | 10秒ごとに自動更新するHTMLビュー |
+| `/camera/latest/<id>` | 最新JPEG |
+| `/camera/image/<id>` | 保存画像一覧 |
+
+GitHub PagesからのJavaScript `fetch`はCORS未設定のため使用せず、公開viewだけをiframe表示します。
+管理route、Cookie、認証情報は転送しません。
 
 ## 🛠 開発者向け情報
 データの更新には `update_data.py` を使用します。このスクリプトは `docs/` 外に配置されているため、GitHub Pagesからは直接参照されません。

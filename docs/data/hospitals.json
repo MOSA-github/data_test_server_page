@@ -11,7 +11,14 @@
     "devices": [
       {"id": "f0:9e:9e:9e:29:16", "name": "Room_301_Bed_A", "type": "power"},
       {"id": "f0:9e:9e:9c:e0:3a", "name": "Room_301_Bed_B", "type": "power"},
-      {"id": "f0:9e:9e:9e:07:7e", "name": "Room_302_Bed_A", "type": "power"}
+      {"id": "f0:9e:9e:9e:07:7e", "name": "Room_302_Bed_A", "type": "power"},
+      {
+        "id": "1",
+        "name": "テストカメラ 1",
+        "type": "camera",
+        "status": "normal",
+        "view_url": "https://unused-dreamily-isolation.ngrok-free.dev/camera/view/1"
+      }
     ]
   },
   {
