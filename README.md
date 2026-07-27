@@ -24,6 +24,7 @@ Webから参照するデータはすべて`docs/data/`配下に置きます。
 |---|---|
 | `hospitals.json` | 病院情報と、水位・電力・発電機・カメラの設備IDを管理するマスター |
 | `latest.json` | 既存収集システムが出力する電力センサの最新値 |
+| `sensors.sample.json` | 岡山大学病院・井原市立井原市民病院のSVGMap用dummyデータ |
 | `archive/[施設ID]/[年]/[年]-[月].csv` | 施設別・月別の電力履歴 |
 
 ### 1. 病院マスター (`hospitals.json`)
@@ -40,6 +41,8 @@ Webから参照するデータはすべて`docs/data/`配下に置きます。
     "prefecture": "岡山県",
     "city": "岡山市",
     "address": "岡山市北区...",
+    "latitude": 34.651347,
+    "longitude": 133.920646,
     "status": "normal",
     "devices": [
       {
@@ -84,6 +87,8 @@ Webから参照するデータはすべて`docs/data/`配下に置きます。
 | `prefecture` | string | 任意 | 都道府県。病院一覧の地域絞り込みにも使用 |
 | `city` | string | 任意 | 市区町村 |
 | `address` | string | 任意 | 住所 |
+| `latitude` | number/null | 任意 | 病院の代表緯度。-90以上90以下 |
+| `longitude` | number/null | 任意 | 病院の代表経度。-180以上180以下 |
 | `status` | enum | 必須 | `normal` / `warning` / `offline` / `error` |
 | `devices` | array | 必須 | 病院に所属する設備。未登録の場合は`[]` |
 
@@ -142,7 +147,45 @@ Webから参照するデータはすべて`docs/data/`配下に置きます。
 | `ble_rssi` | number | BLE受信強度（dBm） |
 | `node_rssi` | number | ノード受信強度（dBm） |
 
-### 3. 電力履歴CSV
+### 3. SVGMap dummyデータ (`sensors.sample.json`)
+
+SVGMapへの配置確認用として、岡山大学病院と井原市立井原市民病院に4種別ずつ、合計8件のdummyセンサを
+用意しています。このファイルはテスト専用であり、実測値として集計・公開しないでください。
+
+| 病院 | 施設ID | latitude | longitude |
+|---|---|---:|---:|
+| 岡山大学病院 | `HOSP-0001` | `34.651347` | `133.920646` |
+| 井原市立井原市民病院 | `HOSPITAL_B` | `34.60337` | `133.458794` |
+
+各センサはSVGMap契約に従い、`id`, `name`, `type`, `status`, `value`, `unit`, `lat`, `lng`,
+`updated_at`, `facility`, `tags`を持ちます。dummy判別用に`is_dummy: true`と`tags: ["dummy", ...]`
+を付けています。
+
+```json
+{
+  "id": "dummy_okadai_water_001",
+  "name": "岡山大学病院 貯水槽",
+  "type": "water",
+  "status": "normal",
+  "value": 62,
+  "unit": "%",
+  "lat": 34.651347,
+  "lng": 133.920646,
+  "updated_at": "2026-07-27T09:00:00+09:00",
+  "facility": {
+    "id": "HOSP-0001",
+    "name": "岡山大学病院",
+    "type": "hospital"
+  },
+  "tags": ["dummy", "water"],
+  "is_dummy": true
+}
+```
+
+病院マスターでは`latitude` / `longitude`、SVGMapセンサでは`lat` / `lng`を使用します。
+dummyを追加する場合は対象病院の代表座標をセンサへ明示的にコピーしてください。
+
+### 4. 電力履歴CSV
 
 保存先は`docs/data/archive/[施設ID]/[年]/[年]-[月].csv`です。
 
@@ -153,7 +196,7 @@ time,id,room,mac_addr,status,power[W],ble_rssi,node_rssi
 
 同じ施設ID・センサIDを病院マスター、最新値、履歴で一貫して使用してください。
 
-### 4. IDの関連付け
+### 5. IDの関連付け
 
 ```text
 hospitals.json[].id
@@ -169,10 +212,10 @@ hospitals.json[].devices[].id
 - IDを変更する場合は、マスター、最新値、履歴生成側を同時に更新します。
 - 管理画面は病院IDの重複を検査します。設備IDを含め、GitHubへ反映する前にもJSONをレビューしてください。
 
-### 5. 管理画面と保存
+### 6. 管理画面と保存
 
 GitHub Pagesはサーバ側書込みを行えないため、`admin.html`の変更はブラウザの
-`localStorage`（key: `mosademy_hospitals_v1`）へ保存されます。
+`localStorage`（key: `mosademy_hospitals_v2`）へ保存されます。
 
 1. 管理者画面で病院と設備IDを登録・編集する。
 2. 「JSONを書き出す」で`hospitals.json`をダウンロードする。
@@ -202,6 +245,7 @@ GitHub Pagesはサーバ側書込みを行えないため、`admin.html`の変�
 │   └── data/
 │       ├── hospitals.json        # 病院・設備IDマスター
 │       ├── latest.json           # 最新の消費電力
+│       ├── sensors.sample.json   # SVGMap用dummyセンサ
 │       └── archive/              # 施設別・月別履歴
 ├── extensions/data_server/       # 任意の認証・DB拡張
 ├── update_data.py                # 既存収集・GitHub更新処理

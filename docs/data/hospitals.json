@@ -1,9 +1,39 @@
 [
-  {"id":"HOSP-0001","name":"HOSP-0001 病院","prefecture":"岡山県","city":"岡山市","address":"","status":"warning","devices":[
-    {"id":"f0:9e:9e:9e:29:16","name":"Room_301_Bed_A","type":"power"},
-    {"id":"f0:9e:9e:9c:e0:3a","name":"Room_301_Bed_B","type":"power"},
-    {"id":"f0:9e:9e:9e:07:7e","name":"Room_302_Bed_A","type":"power"}
-  ]},
-  {"id":"HOSPITAL_A","name":"HOSPITAL_A","prefecture":"岡山県","city":"岡山市","address":"","status":"normal","devices":[]},
-  {"id":"HOSPITAL_B","name":"HOSPITAL_B","prefecture":"岡山県","city":"岡山市","address":"","status":"offline","devices":[]}
+  {
+    "id": "HOSP-0001",
+    "name": "岡山大学病院",
+    "prefecture": "岡山県",
+    "city": "岡山市",
+    "address": "岡山市北区鹿田町2-5-1",
+    "latitude": 34.651347,
+    "longitude": 133.920646,
+    "status": "warning",
+    "devices": [
+      {"id": "f0:9e:9e:9e:29:16", "name": "Room_301_Bed_A", "type": "power"},
+      {"id": "f0:9e:9e:9c:e0:3a", "name": "Room_301_Bed_B", "type": "power"},
+      {"id": "f0:9e:9e:9e:07:7e", "name": "Room_302_Bed_A", "type": "power"}
+    ]
+  },
+  {
+    "id": "HOSPITAL_A",
+    "name": "HOSPITAL_A",
+    "prefecture": "岡山県",
+    "city": "岡山市",
+    "address": "",
+    "latitude": null,
+    "longitude": null,
+    "status": "normal",
+    "devices": []
+  },
+  {
+    "id": "HOSPITAL_B",
+    "name": "井原市立井原市民病院",
+    "prefecture": "岡山県",
+    "city": "井原市",
+    "address": "井原市井原町1186",
+    "latitude": 34.60337,
+    "longitude": 133.458794,
+    "status": "offline",
+    "devices": []
+  }
 ]
