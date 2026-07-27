@@ -70,12 +70,42 @@
   grid-column: span 2;
 }
 
-.camera-frame {
+.camera-image-stage {
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #132720;
+}
+
+.camera-live-image {
   display: block;
   width: 100%;
-  height: 420px;
-  border: 0;
-  background: #132720;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.camera-live-image[hidden] {
+  display: none;
+}
+
+.camera-image-error {
+  padding: 24px;
+  color: #dce9e4;
+  text-align: center;
+}
+
+.camera-image-error strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.camera-image-error p {
+  margin: 0;
+  color: #aabdb5;
+  font-size: 12px;
 }
 
 .camera-live-card .camera-meta {
@@ -107,8 +137,8 @@
 }
 
 @media (max-width: 570px) {
-  .camera-frame {
-    height: 300px;
+  .camera-image-stage {
+    aspect-ratio: 4 / 3;
   }
 
   .camera-live-card .camera-meta {

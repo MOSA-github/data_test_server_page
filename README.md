@@ -233,13 +233,14 @@ https://unused-dreamily-isolation.ngrok-free.dev/camera/view/1
 ```
 
 岡山大学病院のCamera ID `1`へ`view_url`として登録しています。病院詳細の「カメラ」タブでは、
-この自動更新ビューをiframeで表示します。将来の病院別URLは次の形式を想定しています。
+`view_url`から`/camera/latest/<id>`を組み立て、最新JPEGを10秒ごとに更新します。画像は縦横比を維持し、
+表示領域へ全体が収まるように縮尺します。将来の病院別URLは次の形式を想定しています。
 
 ```text
 https://unused-dreamily-isolation.ngrok-free.dev/hospital_001/camera/view/1
 ```
 
-安全上、現在の画面がiframeへ読み込むのはHTTPSかつ
+安全上、現在の画面が画像取得に使用するのはHTTPSかつ
 `unused-dreamily-isolation.ngrok-free.dev`の`/camera/view/<id>`または
 `/<hospital_id>/camera/view/<id>`だけです。任意URL proxyは使用しません。
 
@@ -255,7 +256,8 @@ Camera ID未登録、画像未受信の場合はカメラサーバ側のエラ�
 | `/camera/latest/<id>` | 最新JPEG |
 | `/camera/image/<id>` | 保存画像一覧 |
 
-GitHub PagesからのJavaScript `fetch`はCORS未設定のため使用せず、公開viewだけをiframe表示します。
+GitHub PagesからのJavaScript `fetch`はCORS未設定のため使用せず、`/camera/latest/<id>`を通常の
+`img`要素で読み込みます。ngrok初回確認には公開viewへの「別タブでカメラを開く」リンクを使用します。
 管理route、Cookie、認証情報は転送しません。
 
 ## 🛠 開発者向け情報
