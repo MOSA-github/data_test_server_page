@@ -308,3 +308,20 @@ GitHub Pages 自体には「追記（Append）」の機能がないため、以�
 例：
 - `/data/archive/HOSPITAL_A/2026/2026-04.csv`
 - `/data/archive/HOSPITAL_B/2026/2026-04.csv`
+
+## カメラ画像からの貯水・燃料解析
+
+[燃料監視システム](https://mosa-github.github.io/fuel_level_monitoring_system/) がGitHub Actionsで針位置を検出します。
+病院のカメラカードにある「針検出・実行頻度を設定」から施設ID・カメラIDを引き継いで設定ページを開けます。
+画像上の①最小値・②中心・③最大値・④針先端、設備ID、容量・単位、実行間隔を設定してください。
+
+最新結果は [公開JSON](https://mosa-github.github.io/fuel_level_monitoring_system/data/latest.json) から読み込み、
+施設IDと設備IDで水位／発電機カードへ反映します。病院マスターにまだない設備も、その施設IDが一致すれば表示します。
+検証用の is_demo=true は実測値に取り込みません。取得失敗・停止中・期限切れでは値を「データなし」とします。
+期限は最終成功から max(30分, 設定間隔×3) です。公開JSON自体の取得に失敗した場合は画面上にエラーを表示します。
+管理画面のマスターへ解析値を書き戻すことはありません。
+
+実カメラの認証は監視リポジトリ側の Actions Secret CAMERA_SOURCES_JSON に登録します。
+画像設定・実行間隔の変更はGitHubへの反映後に定期処理へ適用されます。
+
+連携ロジックのテスト: node --test tests/gauge-data.test.cjs
