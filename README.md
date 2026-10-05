@@ -71,7 +71,7 @@ Webから参照するデータはすべて`docs/data/`配下に置きます。
         "name": "テストカメラ 1",
         "type": "camera",
         "status": "normal",
-        "view_url": "https://unused-dreamily-isolation.ngrok-free.dev/camera/view/1"
+        "view_url": "https://camera.mosademy.tech/camera/latest/1?token=<camera-read-token>"
       }
     ]
   }
@@ -103,7 +103,7 @@ Webから参照するデータはすべて`docs/data/`配下に置きます。
 | `value` | number/string/null | 任意 | 現在値。数値`0`は有効な値として扱う |
 | `unit` | string | 任意 | 値の単位。既定値は種別ごとに異なる |
 | `image_url` | string | カメラのみ任意 | 同一originの相対URLまたは許可済みHTTPS URL |
-| `view_url` | string | カメラのみ任意 | ngrokカメラの自動更新ビューURL |
+| `view_url` | string | カメラのみ任意 | Cloudflareカメラの最新JPEG URL。`token`を含むクエリも保持される |
 | `updated_at` | ISO 8601 string | 任意 | センサ側の最終更新日時。timezoneを含める |
 
 #### センサ種別と単位
@@ -113,7 +113,7 @@ Webから参照するデータはすべて`docs/data/`配下に置きます。
 | `water` | 貯水・水位 | `%` | 貯水率、水位率 |
 | `power` | 消費電力 | `W` | 瞬時電力。既存最新値は`latest.json`から取得 |
 | `generator` | 発電機 | `%` | 燃料残量など、データ提供側で意味を明示する |
-| `camera` | カメラ | なし | `view_url`による自動更新映像と接続状態 |
+| `camera` | カメラ | なし | `view_url`の最新JPEGを10秒ごとに更新して表示 |
 
 `value`や対象設備が存在しない場合、値を推測して補完せず「データなし」と表示します。`0`は欠損ではありません。
 また、`W`と`Wh`、`kW`と`kWh`を混同しないでください。
@@ -224,41 +224,33 @@ GitHub Pagesはサーバ側書込みを行えないため、`admin.html`の変�
 4. `docs/data/hospitals.json`を置換してcommit・pushする。
 5. GitHub Pages deploymentの成功と公開画面を確認する。
 
-### 7. ngrokカメラ連携
+### 7. Cloudflareカメラ連携
 
-現在のテスト接続先は次です。
-
-```text
-https://unused-dreamily-isolation.ngrok-free.dev/camera/view/1
-```
-
-岡山大学病院のCamera ID `1`へ`view_url`として登録しています。病院詳細の「カメラ」タブでは、
-`view_url`から`/camera/latest/<id>`を組み立て、最新JPEGを10秒ごとに更新します。画像は縦横比を維持し、
-表示領域へ全体が収まるように縮尺します。将来の病院別URLは次の形式を想定しています。
+カメラの登録URLは次の形式です。
 
 ```text
-https://unused-dreamily-isolation.ngrok-free.dev/hospital_001/camera/view/1
+https://camera.mosademy.tech/camera/latest/1?token=<camera-read-token>
 ```
 
-安全上、現在の画面が画像取得に使用するのはHTTPSかつ
-`unused-dreamily-isolation.ngrok-free.dev`の`/camera/view/<id>`または
-`/<hospital_id>/camera/view/<id>`だけです。任意URL proxyは使用しません。
+管理画面でカメラ設備の`view_url`として登録します。病院詳細の「カメラ」タブでは、
+登録した最新JPEGを10秒ごとに更新します。画像は縦横比を維持し、表示領域へ全体が収まるように縮尺します。
 
-ngrok無料トンネルでは初回アクセス時に確認画面が表示されることがあります。その場合はカメラカードの
-「別タブでカメラを開く」を選択して接続を許可し、病院詳細を再読み込みしてください。トンネル停止中、
-Camera ID未登録、画像未受信の場合はカメラサーバ側のエラー表示になります。
+安全上、画像取得に使用するURLはHTTPSかつ`camera.mosademy.tech`の
+`/camera/latest/<id>`だけを許可します。任意URL proxyは使用しません。`token`を含むクエリパラメータは
+10秒ごとの更新でも保持されます。Camera ID未登録、token不正、画像未受信の場合はエラー案内を表示します。
 
 添付のカメラモジュールでは次のrouteが提供されています。
 
 | route | 内容 |
 |---|---|
-| `/camera/view/<id>` | 10秒ごとに自動更新するHTMLビュー |
 | `/camera/latest/<id>` | 最新JPEG |
 | `/camera/image/<id>` | 保存画像一覧 |
 
 GitHub PagesからのJavaScript `fetch`はCORS未設定のため使用せず、`/camera/latest/<id>`を通常の
-`img`要素で読み込みます。ngrok初回確認には公開viewへの「別タブでカメラを開く」リンクを使用します。
-管理route、Cookie、認証情報は転送しません。
+`img`要素で読み込みます。管理route、Cookie、認証情報は転送しません。
+
+アクセストークンを`docs/data/hospitals.json`へ保存するとGitHub PagesとGit履歴で公開されます。
+公開リポジトリには実トークンを保存せず、管理画面から各ブラウザの`localStorage`へ登録してください。
 
 ## 🛠 開発者向け情報
 データの更新には `update_data.py` を使用します。このスクリプトは `docs/` 外に配置されているため、GitHub Pagesからは直接参照されません。

@@ -17,7 +17,7 @@
         "name": "テストカメラ 1",
         "type": "camera",
         "status": "normal",
-        "view_url": "https://unused-dreamily-isolation.ngrok-free.dev/camera/view/1"
+        "view_url": ""
       }
     ]
   },

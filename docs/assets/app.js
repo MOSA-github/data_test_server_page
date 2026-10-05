@@ -2,9 +2,9 @@ const STORE_KEY="mosademy_hospitals_v3";
 const stateLabels={normal:"正常",warning:"要確認",offline:"オフライン",error:"異常","0w_alert":"0W警告",unknown:"不明"};
 const typeLabels={water:"水位",power:"電力",generator:"発電機",camera:"カメラ"};
 const typeUnits={water:"%",power:"W",generator:"%",camera:""};
-const APP_VERSION="20260728-2";
+const APP_VERSION="20261005-1";
 const NO_DATA="データなし";
-const CAMERA_HOST="unused-dreamily-isolation.ngrok-free.dev";
+const CAMERA_HOST="camera.mosademy.tech";
 const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const stateClass=value=>`state-${String(value||"unknown").toLowerCase()}`;
 const getHospitals=async()=>{const local=localStorage.getItem(STORE_KEY);if(local)return JSON.parse(local);const data=await fetch(`data/hospitals.json?v=${APP_VERSION}`).then(r=>r.json());localStorage.setItem(STORE_KEY,JSON.stringify(data));return data};
@@ -13,8 +13,7 @@ const saveHospitals=data=>localStorage.setItem(STORE_KEY,JSON.stringify(data));
 const statusLabel=value=>stateLabels[String(value||"unknown").toLowerCase()]||value;
 const sensorsFor=(sensors,id)=>sensors.filter(s=>s.id===id);
 const statusOf=(hospital,sensors)=>{const values=sensorsFor(sensors,hospital.id).map(x=>String(x.status).toLowerCase());return values.includes("offline")?"offline":values.includes("0w_alert")?"warning":values.includes("error")?"error":hospital.status||"unknown"};
-const safeCameraViewUrl=value=>{try{const url=new URL(value);return url.protocol==="https:"&&url.hostname===CAMERA_HOST&&/^\/(?:[A-Za-z0-9_-]+\/)?camera\/view\/[A-Za-z0-9_-]+$/.test(url.pathname)?url.href:null}catch{return null}};
-const latestCameraUrlFromView=value=>{const viewUrl=safeCameraViewUrl(value);if(!viewUrl)return null;const url=new URL(viewUrl);url.pathname=url.pathname.replace("/camera/view/","/camera/latest/");return url.href};
+const safeCameraImageUrl=value=>{try{const url=new URL(value);return url.protocol==="https:"&&url.hostname===CAMERA_HOST&&/^\/camera\/latest\/[A-Za-z0-9_-]+$/.test(url.pathname)?url.href:null}catch{return null}};
 const withCacheBust=(value,stamp=Date.now())=>{const url=new URL(value);url.searchParams.set("t",stamp);return url.href};
 
 async function initHospitals(){
@@ -38,7 +37,7 @@ async function initHospital(){
   const noDataCard=label=>`<div class="no-data-card"><strong>${NO_DATA}</strong><p>${label}のデータは登録されていません。</p></div>`;
   powerCards.innerHTML=own.length?own.map(x=>`<article class="power-card"><span class="state ${stateClass(x.status)}">${statusLabel(x.status)}</span><div class="power-value">${Number(x.power_w).toLocaleString()} <small>W</small></div><strong>${esc(x.room)}</strong><p class="muted">${esc(x.mac_addr)}</p></article>`).join(""):noDataCard("消費電力");
   const renderDevices=(type,target)=>{const list=byType(type);target.innerHTML=list.length?list.map(x=>`<article class="power-card"><span class="state ${stateClass(x.status||"unknown")}">${statusLabel(x.status||"unknown")}</span><div class="power-value ${hasValue(x)?"":"no-data-value"}">${hasValue(x)?esc(x.value):NO_DATA} <small>${hasValue(x)?esc(x.unit||typeUnits[type]):""}</small></div><strong>${esc(x.name||x.id)}</strong><p class="muted">${esc(x.id)}</p></article>`).join(""):noDataCard(typeLabels[type])};renderDevices("water",waterCards);renderDevices("generator",generatorCards);
-  cameraGrid.innerHTML=cameras.length?cameras.map(x=>{const viewUrl=safeCameraViewUrl(x.view_url),latestUrl=latestCameraUrlFromView(x.view_url),cameraName=x.name||`カメラ ${x.id}`;return `<article class="camera-card camera-live-card">${latestUrl?`<div class="camera-image-stage"><img class="camera-live-image" data-camera-latest="${esc(latestUrl)}" src="${esc(withCacheBust(latestUrl))}" alt="${esc(cameraName)}の最新画像" loading="lazy" referrerpolicy="no-referrer"><div class="camera-image-error" hidden><strong>カメラ画像を表示できません</strong><p>別タブで接続を許可してから再読み込みしてください。</p></div></div>`:`<div class="camera-placeholder" aria-label="映像データなし">${NO_DATA}</div>`}<div class="camera-meta"><div><h3>${esc(cameraName)}</h3><span class="facility-id">Camera ID: ${esc(x.id)}</span></div>${viewUrl?`<a class="camera-open-link" href="${esc(viewUrl)}" target="_blank" rel="noopener noreferrer">別タブでカメラを開く</a>`:""}</div></article>`}).join(""):noDataCard("カメラ");
+  cameraGrid.innerHTML=cameras.length?cameras.map(x=>{const imageUrl=safeCameraImageUrl(x.view_url),cameraName=x.name||`カメラ ${x.id}`;return `<article class="camera-card camera-live-card">${imageUrl?`<div class="camera-image-stage"><img class="camera-live-image" data-camera-latest="${esc(imageUrl)}" src="${esc(withCacheBust(imageUrl))}" alt="${esc(cameraName)}の最新画像" loading="lazy" referrerpolicy="no-referrer"><div class="camera-image-error" hidden><strong>カメラ画像を表示できません</strong><p>カメラURLとアクセストークンを確認してください。</p></div></div>`:`<div class="camera-placeholder" aria-label="映像データなし">${NO_DATA}</div>`}<div class="camera-meta"><div><h3>${esc(cameraName)}</h3><span class="facility-id">Camera ID: ${esc(x.id)}</span></div>${imageUrl?`<a class="camera-open-link" href="${esc(imageUrl)}" target="_blank" rel="noopener noreferrer">画像を別タブで開く</a>`:""}</div></article>`}).join(""):noDataCard("カメラ");
   const liveCameraImages=[...cameraGrid.querySelectorAll("[data-camera-latest]")];
   const setCameraImageState=(image,loaded)=>{image.hidden=!loaded;const error=image.nextElementSibling;if(error)error.hidden=loaded};
   liveCameraImages.forEach(image=>{image.addEventListener("load",()=>setCameraImageState(image,true));image.addEventListener("error",()=>setCameraImageState(image,false));if(image.complete)setCameraImageState(image,image.naturalWidth>0)});
