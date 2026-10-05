@@ -1,0 +1,31 @@
+name: Sync fuel readings
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: sync-fuel
+  cancel-in-progress: true
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pull public fuel readings
+        run: python scripts/sync_fuel.py
+      - name: Commit when changed
+        run: |
+          if git diff --quiet -- docs/data/fuel_latest.json; then
+            echo "No fuel changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/fuel_latest.json
+          git commit -m "Sync fuel readings"
+          git push

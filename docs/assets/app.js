@@ -1,61 +1,55 @@
-const STORE_KEY="mosademy_hospitals_v3";
-const stateLabels={normal:"正常",warning:"要確認",offline:"オフライン",error:"異常","0w_alert":"0W警告",unknown:"不明"};
-const typeLabels={water:"水位",power:"電力",generator:"発電機",camera:"カメラ"};
-const typeUnits={water:"%",power:"W",generator:"%",camera:""};
-const APP_VERSION="20261005-2";
-const NO_DATA="データなし";
-const CAMERA_HOST="camera.mosademy.tech";
-const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const stateClass=value=>`state-${String(value||"unknown").toLowerCase()}`;
-const getHospitals=async()=>{const local=localStorage.getItem(STORE_KEY);if(local)return JSON.parse(local);const data=await fetch(`data/hospitals.json?v=${APP_VERSION}`).then(r=>r.json());localStorage.setItem(STORE_KEY,JSON.stringify(data));return data};
-const getSensors=()=>fetch("data/latest.json?t="+Date.now()).then(r=>r.json()).catch(()=>[]);
-const saveHospitals=data=>localStorage.setItem(STORE_KEY,JSON.stringify(data));
-const statusLabel=value=>stateLabels[String(value||"unknown").toLowerCase()]||value;
-const sensorsFor=(sensors,id)=>sensors.filter(s=>s.id===id);
-const statusOf=(hospital,sensors)=>{const values=sensorsFor(sensors,hospital.id).map(x=>String(x.status).toLowerCase());return values.includes("offline")?"offline":values.includes("0w_alert")?"warning":values.includes("error")?"error":hospital.status||"unknown"};
-const safeCameraImageUrl=value=>{try{const url=new URL(value);return url.protocol==="https:"&&url.hostname===CAMERA_HOST&&/^\/camera\/latest\/[A-Za-z0-9_-]+$/.test(url.pathname)?url.href:null}catch{return null}};
-const withCacheBust=(value,stamp=Date.now())=>{const url=new URL(value);url.searchParams.set("t",stamp);return url.href};
+import {DEVICE_TYPES,indexFuelReadings,readingKey,formatFuel,fuelState,countByType,findLatestPower} from './core.mjs';
 
-async function getMonitoringHospitals(){
-  const hospitals=await getHospitals();
-  try{return GaugeData.merge(hospitals,await GaugeData.fetchReadings())}
-  catch{const notice=document.createElement("p");notice.className="camera-notice";notice.textContent="カメラ解析データを取得できません。解析結果サイトの公開状態を確認してください。";document.querySelector("main").prepend(notice);return hospitals;}
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let facilities=[], latest=[], fuelPayload={readings:[]}, fuelMap=new Map();
+
+async function getJson(url, fallback){
+  try{const r=await fetch(`${url}${url.includes('?')?'&':'?'}t=${Date.now()}`,{cache:'no-store'}); if(!r.ok) throw Error(r.status); return await r.json();}
+  catch(e){console.warn('fetch failed',url,e); return fallback;}
 }
-async function initHospitals(){
-  const [hospitals,sensors]=await Promise.all([getMonitoringHospitals(),getSensors()]);
-  const search=document.querySelector("#hospitalSearch"),status=document.querySelector("#statusFilter"),area=document.querySelector("#areaFilter");
-  [...new Set(hospitals.map(h=>h.prefecture).filter(Boolean))].sort().forEach(x=>area.insertAdjacentHTML("beforeend",`<option>${esc(x)}</option>`));
-  const draw=()=>{const q=search.value.trim().toLowerCase(),sf=status.value,af=area.value;const rows=hospitals.filter(h=>{const actual=statusOf(h,sensors);return(!q||[h.id,h.name,h.prefecture,h.city].join(" ").toLowerCase().includes(q))&&(!sf||actual===sf)&&(!af||h.prefecture===af)});
-    resultCount.textContent=rows.length;emptyState.hidden=rows.length>0;hospitalGrid.innerHTML=rows.map(h=>{const own=sensorsFor(sensors,h.id),actual=statusOf(h,sensors),power=own.reduce((n,x)=>n+Number(x.power_w||0),0),devices=h.devices||[];return `<a class="hospital-card" href="hospital.html?id=${encodeURIComponent(h.id)}&v=${APP_VERSION}"><div class="card-top"><span class="facility-id">${esc(h.id)}</span><span class="state ${stateClass(actual)}">${statusLabel(actual)}</span></div><h2>${esc(h.name)}</h2><div class="location">${esc([h.prefecture,h.city].filter(Boolean).join(" "))||"所在地未登録"}</div><div class="sensor-kinds">${Object.keys(typeLabels).map(type=>{const present=devices.some(x=>x.type===type)||type==="power"&&own.length;return `<span class="${present?"registered":""}">${typeLabels[type]}：${present?"登録あり":NO_DATA}</span>`}).join("")}</div><div class="card-stats"><div><strong>${devices.length}</strong><span>登録設備ID</span></div><div><strong>${own.length?`${power.toLocaleString()} W`:NO_DATA}</strong><span>現在の電力</span></div></div></a>`}).join("")};
-  [search,status,area].forEach(x=>x.addEventListener("input",draw));clearFilters.onclick=()=>{search.value=status.value=area.value="";draw()};syncText.textContent=`${new Date().toLocaleTimeString("ja-JP",{hour:"2-digit",minute:"2-digit"})} 更新`;draw()
+
+function badge(label, state='muted'){return `<span class="badge ${state}">${esc(label)}</span>`}
+function deviceSummary(f){
+  const devices=f.devices||[];
+  const water=countByType(devices,'water');
+  const power=countByType(devices,'power');
+  const generator=countByType(devices,'generator');
+  const camera=countByType(devices,'camera');
+  const fuels=devices.filter(d=>d.type==='fuel');
+  const fuelText = fuels.length ? fuels.map(d=>formatFuel(d,fuelMap.get(readingKey(f.id,d.id)))).join(' / ') : '未登録';
+  const fuelWorst = fuels.reduce((acc,d)=>{const st=fuelState(d,fuelMap.get(readingKey(f.id,d.id))).level; const rank={nodata:0,normal:1,warning:2,critical:3}; return rank[st]>rank[acc]?st:acc},'nodata');
+  return [
+    badge(`水位：${water?'登録あり':'データなし'}`,water?'ok':'muted'),
+    badge(`電力：${power?'登録あり':'データなし'}`,power?'ok':'muted'),
+    badge(`発電機：${generator?'登録あり':'データなし'}`,generator?'ok':'muted'),
+    badge(`燃料：${fuelText}`,fuelWorst==='critical'?'danger':fuelWorst==='warning'?'warn':fuels.length?'ok':'muted'),
+    badge(`カメラ：${camera?camera+'台':'データなし'}`,camera?'ok':'muted')
+  ].join('');
 }
-async function initHospital(){
-  const id=new URLSearchParams(location.search).get("id"),[hospitals,sensors]=await Promise.all([getMonitoringHospitals(),getSensors()]),h=hospitals.find(x=>x.id===id);
-  if(!h){document.querySelector("main").innerHTML='<div class="empty-state"><strong>病院が見つかりません</strong><p><a href="index.html">病院一覧へ戻る</a></p></div>';return}
-  const own=sensorsFor(sensors,id),actual=statusOf(h,sensors),power=own.reduce((n,x)=>n+Number(x.power_w||0),0),devices=h.devices||[],byType=type=>devices.filter(x=>x.type===type),cameras=byType("camera");
-  document.title=`${h.name} | MOSAdemy Monitor`;hospitalId.textContent=h.id;hospitalName.textContent=crumbName.textContent=h.name;hospitalMeta.textContent=[h.prefecture,h.city,h.address].filter(Boolean).join(" ");hospitalStatus.className=`status-badge state ${stateClass(actual)}`;hospitalStatus.textContent=statusLabel(actual);
-  const hasValue=device=>device&&device.value!==undefined&&device.value!==null&&device.value!=="";
-  const typedValue=type=>{const valued=byType(type).find(hasValue);return valued?`${valued.value} ${valued.unit||typeUnits[type]}`:NO_DATA};
-  metricCards.innerHTML=[["貯水・水位",typedValue("water")],["現在の消費電力",own.length?`${power.toLocaleString()} W`:NO_DATA],["発電機",typedValue("generator")],["監視カメラ",cameras.length?`${cameras.length} 台`:NO_DATA],["最終更新",own[0]?.time||NO_DATA]].map(x=>`<div class="metric"><span>${x[0]}</span><strong class="${x[1]===NO_DATA?"no-data-value":""}">${esc(x[1])}</strong></div>`).join("");
-  sensorSummary.innerHTML=Object.keys(typeLabels).map(type=>{const list=byType(type),powerCount=type==="power"?own.length:0,present=list.length||powerCount;return `<div class="sensor-row"><strong>${typeLabels[type]}</strong><span>${present?`${present} 件`:NO_DATA}</span><span class="${present?"state "+stateClass(type==="power"?actual:list[0]?.status):"no-data-inline"}">${present?statusLabel(type==="power"?actual:list[0]?.status||"unknown"):NO_DATA}</span></div>`}).join("");
-  facilityDetails.innerHTML=[["施設ID",h.id],["都道府県",h.prefecture||NO_DATA],["市区町村",h.city||NO_DATA],["住所",h.address||NO_DATA],["緯度",h.latitude??NO_DATA],["経度",h.longitude??NO_DATA],["設備ID",(h.devices||[]).length?`${h.devices.length}件`:NO_DATA]].map(x=>`<dt>${x[0]}</dt><dd class="${x[1]===NO_DATA?"no-data-inline":""}">${esc(x[1])}</dd>`).join("");
-  const noDataCard=label=>`<div class="no-data-card"><strong>${NO_DATA}</strong><p>${label}のデータは登録されていません。</p></div>`;
-  powerCards.innerHTML=own.length?own.map(x=>`<article class="power-card"><span class="state ${stateClass(x.status)}">${statusLabel(x.status)}</span><div class="power-value">${Number(x.power_w).toLocaleString()} <small>W</small></div><strong>${esc(x.room)}</strong><p class="muted">${esc(x.mac_addr)}</p></article>`).join(""):noDataCard("消費電力");
-  const renderDevices=(type,target)=>{const list=byType(type);target.innerHTML=list.length?list.map(x=>`<article class="power-card"><span class="state ${stateClass(x.status||"unknown")}">${statusLabel(x.status||"unknown")}</span><div class="power-value ${hasValue(x)?"":"no-data-value"}">${hasValue(x)?esc(x.value):NO_DATA} <small>${hasValue(x)?esc(x.unit||typeUnits[type]):""}</small></div><strong>${esc(x.name||x.id)}</strong><p class="muted">${esc(x.id)}</p>${x.gauge_id?`<p class="muted">${esc(x.gauge_state)} · ${esc(x.updated_at?new Date(x.updated_at).toLocaleString("ja-JP"):"未取得")}</p><a href="https://mosa-github.github.io/fuel_level_monitoring_system/settings.html?id=${encodeURIComponent(x.gauge_id)}" target="_blank" rel="noopener">画像解析の設定 ↗</a>`:""}</article>`).join(""):noDataCard(typeLabels[type])};renderDevices("water",waterCards);renderDevices("generator",generatorCards);
-  cameraGrid.innerHTML=cameras.length?cameras.map(x=>{const imageUrl=safeCameraImageUrl(x.view_url),cameraName=x.name||`カメラ ${x.id}`;return `<article class="camera-card camera-live-card">${imageUrl?`<div class="camera-image-stage"><img class="camera-live-image" data-camera-latest="${esc(imageUrl)}" src="${esc(withCacheBust(imageUrl))}" alt="${esc(cameraName)}の最新画像" loading="lazy" referrerpolicy="no-referrer"><div class="camera-image-error" hidden><strong>カメラ画像を表示できません</strong><p>カメラURLとアクセストークンを確認してください。</p></div></div>`:`<div class="camera-placeholder" aria-label="映像データなし">${NO_DATA}</div>`}<div class="camera-meta"><div><h3>${esc(cameraName)}</h3><span class="facility-id">Camera ID: ${esc(x.id)}</span><p><a href="https://mosa-github.github.io/fuel_level_monitoring_system/settings.html?camera_id=${encodeURIComponent(x.id)}&facility_id=${encodeURIComponent(h.id)}" target="_blank" rel="noopener">針検出・実行頻度を設定 ↗</a></p></div>${imageUrl?`<a class="camera-open-link" href="${esc(imageUrl)}" target="_blank" rel="noopener noreferrer">画像を別タブで開く</a>`:""}</div></article>`}).join(""):noDataCard("カメラ");
-  const liveCameraImages=[...cameraGrid.querySelectorAll("[data-camera-latest]")];
-  const setCameraImageState=(image,loaded)=>{image.hidden=!loaded;const error=image.nextElementSibling;if(error)error.hidden=loaded};
-  liveCameraImages.forEach(image=>{image.addEventListener("load",()=>setCameraImageState(image,true));image.addEventListener("error",()=>setCameraImageState(image,false));if(image.complete)setCameraImageState(image,image.naturalWidth>0)});
-  if(liveCameraImages.length)setInterval(()=>liveCameraImages.forEach(image=>{image.src=withCacheBust(image.dataset.cameraLatest)}),10000);
-  document.querySelectorAll(".tab").forEach(tab=>tab.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===tab));["overview","water","power","generator","camera"].forEach(x=>document.querySelector(`#${x}Panel`).hidden=x!==tab.dataset.tab)})
+
+function statusLabel(s){return s==='normal'?['正常','ok']:s==='offline'?['オフライン','muted']:['要確認','warn'];}
+function render(){
+  const q=$('#q').value.trim().toLowerCase(), st=$('#statusFilter').value, region=$('#regionFilter').value;
+  const rows=facilities.filter(f=>(!q||[f.id,f.name,f.prefecture,f.city].join(' ').toLowerCase().includes(q))&&(!st||f.status===st)&&(!region||f.prefecture===region));
+  $('#count').textContent=`${rows.length} 件の病院`;
+  $('#cards').innerHTML=rows.map(f=>{
+    const [sl,sc]=statusLabel(f.status); const p=findLatestPower(latest,f.id); const n=(f.devices||[]).length;
+    return `<article class="facility-card" tabindex="0" data-id="${esc(f.id)}"><div class="card-top"><span class="facility-id">${esc(f.id)}</span>${badge(sl,sc)}</div><h2>${esc(f.name)}</h2><div class="place">${esc([f.prefecture,f.city].filter(Boolean).join(' '))}</div><div class="badges">${deviceSummary(f)}</div><div class="metrics"><div><strong>${n}</strong><span>登録設備ID</span></div><div><strong>${p==null?'データなし':p.toLocaleString('ja-JP')+' W'}</strong><span>現在の電力</span></div></div></article>`;
+  }).join('') || '<div class="empty">条件に合う病院がありません。</div>';
+  document.querySelectorAll('.facility-card').forEach(el=>el.addEventListener('click',()=>location.href=`facility.html?id=${encodeURIComponent(el.dataset.id)}`));
 }
-function deviceRow(device={}){const row=document.createElement("div");row.className="device-row";row.innerHTML=`<input name="device_id" value="${esc(device.id)}" placeholder="センサ／カメラID" aria-label="設備ID"><input name="device_name" value="${esc(device.name)}" placeholder="表示名・設置場所" aria-label="設備名"><select name="device_type" aria-label="設備種別">${Object.entries(typeLabels).map(([value,label])=>`<option value="${value}">${label}</option>`).join("")}</select><input name="device_view_url" type="url" value="${esc(device.view_url)}" placeholder="カメラ表示URL（任意）" aria-label="カメラ表示URL"><button type="button" class="remove-device" aria-label="設備を削除">×</button>`;row.querySelector("select").value=device.type||"power";row.querySelector(".remove-device").onclick=()=>row.remove();return row}
-async function initAdmin(){
-  let hospitals=await getHospitals(),editingId=null;const dialog=document.querySelector("#editorDialog"),form=document.querySelector("#hospitalForm");
-  const draw=()=>{const q=adminSearch.value.toLowerCase(),rows=hospitals.filter(h=>!q||`${h.id} ${h.name}`.toLowerCase().includes(q));adminCount.textContent=rows.length;adminRows.innerHTML=rows.map(h=>`<tr><td><span class="facility-id">${esc(h.id)}</span></td><td><strong>${esc(h.name)}</strong></td><td>${esc([h.prefecture,h.city].filter(Boolean).join(" "))}</td><td>${(h.devices||[]).length}件</td><td><span class="state ${stateClass(h.status)}">${statusLabel(h.status)}</span></td><td class="row-actions"><button data-edit="${esc(h.id)}">編集</button></td></tr>`).join("");document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEditor(b.dataset.edit))};
-  const openEditor=id=>{const h=hospitals.find(x=>x.id===id)||{id:"",name:"",prefecture:"岡山県",city:"岡山市",address:"",latitude:null,longitude:null,status:"normal",devices:[]};editingId=id||null;dialogTitle.textContent=id?"病院を編集":"病院を登録";Object.keys(h).filter(k=>form.elements[k]).forEach(k=>form.elements[k].value=h[k]??"");deviceRows.innerHTML="";(h.devices||[]).forEach(x=>deviceRows.append(deviceRow(x)));deleteHospital.hidden=!id;dialog.showModal()};
-  newHospital.onclick=()=>openEditor();addDevice.onclick=()=>deviceRows.append(deviceRow());adminSearch.oninput=draw;deleteHospital.onclick=()=>{if(editingId&&confirm("この病院を削除しますか？")){hospitals=hospitals.filter(x=>x.id!==editingId);saveHospitals(hospitals);dialog.close();draw()}};
-  form.addEventListener("submit",e=>{if(e.submitter?.value!=="save")return;e.preventDefault();if(!form.reportValidity())return;const fd=new FormData(form),id=fd.get("id").trim();if(hospitals.some(x=>x.id===id&&x.id!==editingId)){alert("同じ施設IDが登録されています。");return}const devices=[...deviceRows.querySelectorAll(".device-row")].map(r=>({id:r.querySelector('[name=device_id]').value.trim(),name:r.querySelector('[name=device_name]').value.trim(),type:r.querySelector('[name=device_type]').value,view_url:r.querySelector('[name=device_view_url]').value.trim()})).filter(x=>x.id);const coordinate=name=>fd.get(name)===""?null:Number(fd.get(name));const item={id,name:fd.get("name").trim(),prefecture:fd.get("prefecture").trim(),city:fd.get("city").trim(),address:fd.get("address").trim(),latitude:coordinate("latitude"),longitude:coordinate("longitude"),status:fd.get("status"),devices};const i=hospitals.findIndex(x=>x.id===editingId);i>=0?hospitals.splice(i,1,item):hospitals.push(item);saveHospitals(hospitals);dialog.close();draw()});
-  exportData.onclick=()=>{const blob=new Blob([JSON.stringify(hospitals,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="hospitals.json";a.click();URL.revokeObjectURL(a.href)};draw()
+
+async function main(){
+  [facilities,latest]=await Promise.all([getJson('data/facilities.json',[]),getJson('data/latest.json',[])]);
+  const integ=await getJson('data/integrations.json',{});
+  fuelPayload=await getJson('data/fuel_latest.json',{readings:[]});
+  if((fuelPayload.readings||[]).length===0 && integ.fuel_monitor_url){fuelPayload=await getJson(integ.fuel_monitor_url,{readings:[]});}
+  fuelMap=indexFuelReadings(fuelPayload);
+  const regions=[...new Set(facilities.map(f=>f.prefecture).filter(Boolean))]; $('#regionFilter').innerHTML='<option value="">すべての地域</option>'+regions.map(x=>`<option>${esc(x)}</option>`).join('');
+  ['q','statusFilter','regionFilter'].forEach(id=>$('#'+id).addEventListener(id==='q'?'input':'change',render));
+  $('#clear').onclick=()=>{$('#q').value='';$('#statusFilter').value='';$('#regionFilter').value='';render();};
+  $('#updated').textContent=new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'})+' 更新';
+  render();
 }
-const page=document.body.dataset.page;({hospitals:initHospitals,hospital:initHospital,admin:initAdmin}[page]||(()=>{}))();
+main();
