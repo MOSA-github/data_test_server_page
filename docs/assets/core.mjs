@@ -2,35 +2,45 @@ export const DEVICE_TYPES = {
   water: '水位',
   power: '電力',
   generator: '発電機',
-  fuel: '燃料',
+  fuel: '燃料残量',
   camera: 'カメラ'
 };
-
-export function normalizeFuelReadings(payload) {
-  const rows = Array.isArray(payload) ? payload : (Array.isArray(payload?.readings) ? payload.readings : []);
-  return rows.filter(r => r && typeof r.facility_id === 'string' && typeof r.device_id === 'string');
-}
 
 export function readingKey(facilityId, deviceId) {
   return `${facilityId}::${deviceId}`;
 }
 
-export function indexFuelReadings(payload) {
-  const m = new Map();
-  for (const r of normalizeFuelReadings(payload)) m.set(readingKey(r.facility_id, r.device_id), r);
-  return m;
+export function normalizeReadings(payload) {
+  if (Array.isArray(payload)) return payload.filter(x => x && typeof x === 'object');
+  if (Array.isArray(payload?.readings)) return payload.readings.filter(x => x && typeof x === 'object');
+  if (payload && typeof payload === 'object' && ('value' in payload || 'status' in payload)) return [payload];
+  return [];
 }
 
-export function fuelPercent(device, reading) {
+export function resolveReading(payload, facility, device) {
+  const rows = normalizeReadings(payload);
+  if (!rows.length) return null;
+  // URLが1計器だけを返す場合は、ID合わせを利用者に要求しない。
+  if (rows.length === 1) return rows[0];
+  // 複数計器を含むURLでは、設備IDまたは facility_id + device_id で選ぶ。
+  const sourceId = String(device?.source_reading_id || '').trim();
+  if (sourceId) {
+    const x = rows.find(r => String(r.id ?? '') === sourceId || String(r.device_id ?? '') === sourceId);
+    if (x) return x;
+  }
+  const exact = rows.find(r => String(r.facility_id ?? '') === String(facility?.id ?? '') && String(r.device_id ?? '') === String(device?.id ?? ''));
+  if (exact) return exact;
+  return rows.find(r => String(r.id ?? '') === String(device?.id ?? '') || String(r.device_id ?? '') === String(device?.id ?? '')) || null;
+}
+
+export function fuelPercent(_device, reading) {
   if (Number.isFinite(Number(reading?.percent))) return Number(reading.percent);
-  const value = Number(reading?.value);
-  const cap = Number(device?.capacity);
-  if (Number.isFinite(value) && Number.isFinite(cap) && cap > 0) return value / cap * 100;
+  if (String(reading?.unit ?? '').trim() === '%' && Number.isFinite(Number(reading?.value))) return Number(reading.value);
   return null;
 }
 
 export function fuelState(device, reading) {
-  if (!reading || reading.status !== 'normal' || reading.value == null) return {level:'nodata', label:'データなし'};
+  if (!reading || reading.status === 'error' || reading.status === 'disabled' || reading.value == null) return {level:'nodata', label:'データなし'};
   const p = fuelPercent(device, reading);
   if (p == null) return {level:'normal', label:'取得済み'};
   const critical = Number.isFinite(Number(device?.critical_percent)) ? Number(device.critical_percent) : 15;
@@ -41,7 +51,7 @@ export function fuelState(device, reading) {
 }
 
 export function formatFuel(device, reading) {
-  if (!reading || reading.status !== 'normal' || reading.value == null) return 'データなし';
+  if (!reading || reading.status === 'error' || reading.status === 'disabled' || reading.value == null) return 'データなし';
   const unit = reading.unit || device?.unit || '';
   const value = Number(reading.value);
   const v = Number.isFinite(value) ? value.toLocaleString('ja-JP', {maximumFractionDigits:1}) : String(reading.value);

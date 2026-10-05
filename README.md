@@ -1,58 +1,35 @@
-# MOSAdemy Monitor / data_test_server_page — Fuel integrated edition
+# MOSAdemy Monitor / data_test_server_page — URL source edition
 
-病院・設備・最新値を一元管理する GitHub Pages 用ダッシュボードです。
+病院・設備・最新値を一元管理するGitHub Pagesダッシュボードです。
 
-## 今回の変更
+## 燃料残量の登録
 
-- 上部メニューから **「カメラ解析」** を削除しました。
-- 病院編集の設備種別に **「燃料残量」** を追加しました。
-- 燃料設備では `設備ID / 表示名 / 容量 / 単位 / 警告% / 危険%` だけを登録します。
-- カメラURL、針校正、台形補正、認識しきい値はこのリポジトリでは管理しません。
-- `facility_id + device_id` で `fuel_level_monitoring_system` の公開結果を自動対応させます。
-- 病院カードに `燃料：3,178.3 L（70.6%）` のように表示します。
-- 5分ごとの Action が公開燃料結果を `docs/data/fuel_latest.json` に同期します。
-
-## 役割分担
-
-### data_test_server_page
-
-- 病院登録
-- 設備登録
-- 燃料容量・しきい値
-- 水位・電力・発電機・燃料・カメラの一元表示
-
-### fuel_level_monitoring_system
-
-- カメラ画像取得
-- ①最小目盛 / ②中心 / ③最大目盛
-- 台形補正
-- 針自動認識
-- L / % への換算
-
-両者は `施設ID + 設備ID` だけで接続します。
+病院編集で設備種別を **燃料残量** にし、`fuel_level_monitoring_system` が公開するJSON URLを貼ります。
 
 例：
 
 ```text
-facility_id = HOSP-0001
-device_id   = fuel-1
+https://mosa-github.github.io/fuel_level_monitoring_system/data/latest.json
 ```
 
-## 燃料データURL
+容量・単位・カメラURL・針校正値は病院側で二重登録しません。値・単位・%・状態はJSONから読みます。
 
-`docs/data/integrations.json` の `fuel_monitor_url` を実際の公開URLに合わせます。
+JSONに読み取りが1件だけなら、解析側と病院側の設備IDを一致させる必要はありません。複数件を含むURLの場合は、`facility_id + device_id` または設備IDで対象を選びます。
 
-```json
-{
-  "fuel_monitor_url": "https://mosa-github.github.io/fuel_level_monitoring_system/data/latest.json"
-}
-```
+## 編集と削除
 
-カメラアクセストークンはここには保存しません。
+- 既存病院はそのまま編集可能です。
+- 設備行の「削除」で設備を削除できます。
+- 「この病院を削除」で病院ごと削除できます。
+- 変更後に管理画面上部の「GitHubへ本番反映」を押すと `docs/data/facilities.json` をmainへcommitします。
+
+## URL確認
+
+燃料残量のデータURL欄にある「URL確認」を押すと、その場でJSONを取得し、現在値を確認できます。
 
 ## GitHub Pages
 
-Pages source を `main / docs` に設定してください。
+Pages source は `main / docs` を使用します。
 
 ## テスト
 

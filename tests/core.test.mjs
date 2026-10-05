@@ -1,20 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {indexFuelReadings,readingKey,fuelPercent,fuelState,formatFuel} from '../docs/assets/core.mjs';
+import {normalizeReadings,resolveReading,fuelPercent,fuelState,formatFuel} from '../docs/assets/core.mjs';
 
-test('matches fuel by facility + device id',()=>{
-  const m=indexFuelReadings({readings:[{facility_id:'HOSP-0001',device_id:'fuel-1',status:'normal',value:3178.322,unit:'L',percent:70.63}]});
-  assert.equal(m.get(readingKey('HOSP-0001','fuel-1')).value,3178.322);
+test('single-reading URL needs no matching IDs',()=>{
+  const payload={readings:[{id:'demo-fuel',facility_id:'DEMO',device_id:'demo-fuel',status:'normal',value:73.448,unit:'%',percent:73.45}]};
+  const r=resolveReading(payload,{id:'HOSP-0001'},{id:'fuel-1',type:'fuel'});
+  assert.equal(r.value,73.448);
 });
-test('computes percent from capacity if payload has no percent',()=>{
-  assert.equal(fuelPercent({capacity:4500},{value:2250}),50);
+test('multi-reading URL matches facility + device',()=>{
+  const payload={readings:[{facility_id:'A',device_id:'x',value:1},{facility_id:'HOSP-0001',device_id:'fuel-1',value:2}]};
+  assert.equal(resolveReading(payload,{id:'HOSP-0001'},{id:'fuel-1'}).value,2);
 });
-test('warning thresholds',()=>{
-  const d={warning_percent:30,critical_percent:15,capacity:100};
-  assert.equal(fuelState(d,{status:'normal',value:20}).level,'warning');
-  assert.equal(fuelState(d,{status:'normal',value:10}).level,'critical');
-  assert.equal(fuelState(d,{status:'normal',value:80}).level,'normal');
-});
-test('formats liters and percent',()=>{
-  assert.match(formatFuel({capacity:4500,unit:'L'},{status:'normal',value:3178.322,unit:'L',percent:70.63}),/3,178\.3 L（70\.6%）/);
-});
+test('direct reading object is accepted',()=>{assert.equal(normalizeReadings({status:'normal',value:55,unit:'%'}).length,1)});
+test('percent comes from source reading',()=>{assert.equal(fuelPercent({}, {value:3178,unit:'L',percent:70.63}),70.63)});
+test('default warning thresholds use source percent',()=>{assert.equal(fuelState({}, {status:'normal',value:20,unit:'%',percent:20}).level,'warning');assert.equal(fuelState({}, {status:'normal',value:10,unit:'%',percent:10}).level,'critical')});
+test('formats source unit and percent',()=>{assert.match(formatFuel({}, {status:'normal',value:3178.322,unit:'L',percent:70.63}),/3,178\.3 L（70\.6%）/)});

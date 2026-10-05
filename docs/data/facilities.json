@@ -9,9 +9,24 @@
     "longitude": 133.920646,
     "status": "warning",
     "devices": [
-      {"id": "1", "name": "テストカメラ1", "type": "camera", "camera_url": ""},
-      {"id": "2", "name": "テストカメラ2", "type": "camera", "camera_url": ""},
-      {"id": "fuel-1", "name": "非常用発電機 燃料残量", "type": "fuel", "capacity": 4500, "unit": "L", "warning_percent": 30, "critical_percent": 15}
+      {
+        "id": "1",
+        "name": "テストカメラ1",
+        "type": "camera",
+        "camera_url": ""
+      },
+      {
+        "id": "2",
+        "name": "テストカメラ2",
+        "type": "camera",
+        "camera_url": ""
+      },
+      {
+        "id": "fuel-1",
+        "name": "非常用発電機 燃料残量",
+        "type": "fuel",
+        "data_url": "https://mosa-github.github.io/fuel_level_monitoring_system/data/latest.json"
+      }
     ]
   },
   {
