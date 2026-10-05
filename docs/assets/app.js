@@ -1,4 +1,4 @@
-import {resolveReading,readingKey,formatFuel,fuelState,countByType,findLatestPower} from './core.mjs';
+import {resolveReading,readingKey,formatFuel,fuelState,countByType,findLatestPower} from './core.mjs?v=20261006-jsonurl2';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -18,7 +18,7 @@ async function loadFuelReadings(){
       tasks.push((async()=>{
         let payload=cache.get(d.data_url);
         if(!payload){payload=await getJson(d.data_url,{readings:[]});cache.set(d.data_url,payload);}
-        const reading=resolveReading(payload,f,d);
+        const reading=resolveReading(payload);
         if(reading)map.set(readingKey(f.id,d.id),reading);
       })());
     }

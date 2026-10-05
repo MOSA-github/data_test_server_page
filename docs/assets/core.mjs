@@ -10,27 +10,15 @@ export function readingKey(facilityId, deviceId) {
   return `${facilityId}::${deviceId}`;
 }
 
-export function normalizeReadings(payload) {
-  if (Array.isArray(payload)) return payload.filter(x => x && typeof x === 'object');
-  if (Array.isArray(payload?.readings)) return payload.readings.filter(x => x && typeof x === 'object');
-  if (payload && typeof payload === 'object' && ('value' in payload || 'status' in payload)) return [payload];
-  return [];
-}
-
-export function resolveReading(payload, facility, device) {
-  const rows = normalizeReadings(payload);
-  if (!rows.length) return null;
-  // URLが1計器だけを返す場合は、ID合わせを利用者に要求しない。
-  if (rows.length === 1) return rows[0];
-  // 複数計器を含むURLでは、設備IDまたは facility_id + device_id で選ぶ。
-  const sourceId = String(device?.source_reading_id || '').trim();
-  if (sourceId) {
-    const x = rows.find(r => String(r.id ?? '') === sourceId || String(r.device_id ?? '') === sourceId);
-    if (x) return x;
-  }
-  const exact = rows.find(r => String(r.facility_id ?? '') === String(facility?.id ?? '') && String(r.device_id ?? '') === String(device?.id ?? ''));
-  if (exact) return exact;
-  return rows.find(r => String(r.id ?? '') === String(device?.id ?? '') || String(r.device_id ?? '') === String(device?.id ?? '')) || null;
+// A hospital device is linked by its registered JSON URL itself.
+// No facility_id/device_id matching is performed here.
+export function resolveReading(payload) {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null;
+  // Aggregate endpoints such as {readings:[...]} are intentionally rejected.
+  // Use the per-gauge endpoint: /data/devices/<gauge-id>.json
+  if (Array.isArray(payload.readings)) return null;
+  if ('value' in payload || 'status' in payload) return payload;
+  return null;
 }
 
 export function fuelPercent(_device, reading) {

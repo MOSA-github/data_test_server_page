@@ -36,3 +36,21 @@ Pages source は `main / docs` を使用します。
 ```bash
 node --test tests/core.test.mjs
 ```
+
+
+## 燃料残量のデータ連携（v3）
+
+燃料設備は `JSON URL` だけで解析結果に接続します。カメラ設備の `camera_url` と同じ考え方です。
+
+例:
+
+```json
+{
+  "id": "fuel-local-1",
+  "name": "非常用発電機 燃料残量",
+  "type": "fuel",
+  "data_url": "https://mosa-github.github.io/fuel_level_monitoring_system/data/devices/demo-fuel.json"
+}
+```
+
+病院側の設備IDと解析側のIDは一致不要です。URL先の1計器専用JSONをその設備の値として表示します。`data/latest.json` のような複数計器一覧JSONは誤接続防止のため使用しません。

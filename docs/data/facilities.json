@@ -20,12 +20,6 @@
         "name": "テストカメラ2",
         "type": "camera",
         "camera_url": ""
-      },
-      {
-        "id": "fuel-1",
-        "name": "非常用発電機 燃料残量",
-        "type": "fuel",
-        "data_url": "https://mosa-github.github.io/fuel_level_monitoring_system/data/latest.json"
       }
     ]
   },
