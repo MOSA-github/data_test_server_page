@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 1671,
+      "sha256": "6f0b3a8f9b1c8e4891dde6a627af0d6668accaa173ecfc2fe180ba879ea40e97"
+    },
+    {
+      "path": "data-guide.html",
+      "bytes": 1361,
+      "sha256": "6f24b2b3df20ac8be347cc4b4b3ac536339bfd76c4775c08155c4b589484176a"
+    },
+    {
+      "path": "svgmap-guide.html",
+      "bytes": 1927,
+      "sha256": "78019fda43d2ce86ae92f70036f10036b746d30de0e6d2af2d924c5c6421440b"
+    },
+    {
+      "path": "assets/site.css",
+      "bytes": 1351,
+      "sha256": "ba7b3de6771796088592976d8e8323bfee68dd33f2b78d93816f5eac5df083bd"
+    },
+    {
+      "path": "assets/site.js",
+      "bytes": 1979,
+      "sha256": "1e024a59de1e4274c8a813cda73951412c8d822f8b1302e8f747e702aa62b9c8"
+    },
+    {
+      "path": "public-data/catalog.json",
+      "bytes": 68,
+      "sha256": "74fa4e8b607d560eab18ae8897186b258d874d8b24e1276bde5e3a3e42afd233"
+    }
+  ]
+}
