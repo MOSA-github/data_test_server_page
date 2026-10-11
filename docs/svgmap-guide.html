@@ -4,26 +4,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="MOSAdemy公開データとSVGMapの連携ガイド">
-  <title>SVGMap Integration | MOSAdemy</title>
+  <title>SVGMap連携 | MOSAdemy</title>
   <link rel="stylesheet" href="assets/site.css">
 </head>
 <body data-page="svgmap">
   <header class="site-header"><div class="header-inner">
     <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">M</span>MOSAdemy Data Platform</a>
-    <nav aria-label="Main navigation"><a href="data-guide.html">Public Data</a><a href="svgmap-guide.html" aria-current="page">SVGMap</a><a href="https://github.com/MOSA-github/data_test_server_page">GitHub</a></nav>
+    <nav aria-label="メインナビゲーション"><a href="data-guide.html">公開データ</a><a href="svgmap-guide.html" aria-current="page">SVGMap</a><a href="https://github.com/MOSA-github/data_test_server_page">GitHub</a></nav>
   </div></header>
 
   <main>
-    <section class="page-intro" aria-labelledby="page-title"><p class="eyebrow">SVGMAP INTEGRATION</p><h1 id="page-title">Public Data Mapping</h1><p class="lead">Endpoint / Fetch / Fields / Mapping</p></section>
+    <section class="page-intro" aria-labelledby="page-title"><p class="eyebrow">SVGMap連携</p><h1 id="page-title">公開データのマッピング</h1><p class="lead">エンドポイント / 取得 / フィールド / マッピング</p></section>
 
     <section class="section" aria-labelledby="endpoint-title">
-      <div class="section-heading"><div><p class="section-kicker">ENDPOINT</p><h2 id="endpoint-title">Public catalog</h2></div><span class="badge badge-public">PUBLIC</span></div>
-      <div class="endpoint-row"><code>https://mosa-github.github.io/data_test_server_page/public-data/catalog.json</code><a href="public-data/catalog.json">Open JSON ↗</a></div>
-      <dl class="spec-grid"><div><dt>Format</dt><dd>JSON</dd></div><div><dt>Schema</dt><dd>Version 1</dd></div><div><dt>Datasets</dt><dd>Catalog array</dd></div><div><dt>Auth</dt><dd>None</dd></div></dl>
+      <div class="section-heading"><div><p class="section-kicker">エンドポイント</p><h2 id="endpoint-title">公開カタログ</h2></div><span class="badge badge-public">公開</span></div>
+      <div class="endpoint-row"><code>https://mosa-github.github.io/data_test_server_page/public-data/catalog.json</code><a href="public-data/catalog.json">JSONを開く ↗</a></div>
+      <dl class="spec-grid"><div><dt>形式</dt><dd>JSON</dd></div><div><dt>スキーマ</dt><dd>バージョン 1</dd></div><div><dt>データセット</dt><dd>カタログ配列</dd></div><div><dt>認証</dt><dd>なし</dd></div></dl>
     </section>
 
     <section class="section" aria-labelledby="fetch-title">
-      <div class="section-heading"><div><p class="section-kicker">FETCH</p><h2 id="fetch-title">Catalog request</h2></div><span class="badge badge-code">JAVASCRIPT</span></div>
+      <div class="section-heading"><div><p class="section-kicker">取得</p><h2 id="fetch-title">カタログ取得</h2></div><span class="badge badge-code">JAVASCRIPT</span></div>
       <pre><code><span class="syntax-keyword">async function</span> loadPublicCatalog() {
   <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> fetch(
     <span class="syntax-string">"https://mosa-github.github.io/data_test_server_page/public-data/catalog.json"</span>
@@ -40,21 +40,21 @@
     </section>
 
     <section class="section" aria-labelledby="fields-title">
-      <div class="section-heading"><div><p class="section-kicker">FIELDS</p><h2 id="fields-title">Catalog contract</h2></div></div>
-      <div class="table-shell"><table><thead><tr><th>Field</th><th>Type</th><th>Use</th></tr></thead><tbody>
-        <tr><td><code>schema_version</code></td><td>number</td><td>Catalog schema</td></tr>
-        <tr><td><code>generated_at</code></td><td>string | null</td><td>Release timestamp</td></tr>
-        <tr><td><code>datasets</code></td><td>array</td><td>Approved dataset descriptors</td></tr>
+      <div class="section-heading"><div><p class="section-kicker">フィールド</p><h2 id="fields-title">カタログ仕様</h2></div></div>
+      <div class="table-shell"><table><thead><tr><th>フィールド</th><th>型</th><th>用途</th></tr></thead><tbody>
+        <tr><td><code>schema_version</code></td><td>number</td><td>カタログのスキーマ</td></tr>
+        <tr><td><code>generated_at</code></td><td>string | null</td><td>公開日時</td></tr>
+        <tr><td><code>datasets</code></td><td>array</td><td>承認済みデータセットの定義</td></tr>
       </tbody></table></div>
     </section>
 
     <section class="section" aria-labelledby="mapping-title">
-      <div class="section-heading"><div><p class="section-kicker">MAPPING</p><h2 id="mapping-title">Integration flow</h2></div></div>
-      <ol class="steps"><li><span>01</span><div><strong>Select</strong><small>Dataset URL from catalog</small></div></li><li><span>02</span><div><strong>Fetch</strong><small>JSON or CSV by declared format</small></div></li><li><span>03</span><div><strong>Validate</strong><small>Coordinates and required fields</small></div></li><li><span>04</span><div><strong>Render</strong><small>Stable ID as POI key</small></div></li></ol>
-      <p class="note">Failed updates retain the last successful render and expose an error state</p>
+      <div class="section-heading"><div><p class="section-kicker">マッピング</p><h2 id="mapping-title">連携フロー</h2></div></div>
+      <ol class="steps"><li><span>01</span><div><strong>選択</strong><small>カタログからURLを選択</small></div></li><li><span>02</span><div><strong>取得</strong><small>定義形式に従いJSONまたはCSVを取得</small></div></li><li><span>03</span><div><strong>検証</strong><small>座標と必須フィールドを確認</small></div></li><li><span>04</span><div><strong>描画</strong><small>安定IDをPOIキーとして使用</small></div></li></ol>
+      <p class="note">更新失敗時は最後に取得できた表示を保持し エラー状態を表示</p>
     </section>
   </main>
-  <footer><a href="index.html">← Overview</a><a href="data-guide.html">Data Format</a></footer>
+  <footer><a href="index.html">← 概要</a><a href="data-guide.html">データ仕様</a></footer>
   <script src="assets/site.js"></script>
 </body>
 </html>

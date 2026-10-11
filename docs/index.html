@@ -11,8 +11,8 @@
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">M</span>MOSAdemy Data Platform</a>
-      <nav aria-label="Main navigation">
-        <a href="data-guide.html">Public Data</a>
+      <nav aria-label="メインナビゲーション">
+        <a href="data-guide.html">公開データ</a>
         <a href="svgmap-guide.html">SVGMap</a>
         <a href="https://github.com/MOSA-github/data_test_server_page">GitHub</a>
       </nav>
@@ -21,7 +21,7 @@
 
   <main>
     <section class="page-intro" aria-labelledby="page-title">
-      <p class="eyebrow">PUBLIC DATA</p>
+      <p class="eyebrow">公開データ</p>
       <h1 id="page-title">MOSAdemy 公開データ</h1>
       <p class="lead">JSON / CSV / SVGMap</p>
     </section>
@@ -29,40 +29,40 @@
     <section class="section" aria-labelledby="datasets-title">
       <div class="section-heading">
         <div>
-          <p class="section-kicker">CATALOG</p>
-          <h2 id="datasets-title">Datasets</h2>
+          <p class="section-kicker">カタログ</p>
+          <h2 id="datasets-title">データセット</h2>
         </div>
-        <span class="count" id="datasetCount">— datasets</span>
+        <span class="count" id="datasetCount">—件</span>
       </div>
       <div class="table-shell">
         <table class="dataset-table">
-          <thead><tr><th>Dataset</th><th>Format</th><th>Update</th><th>Status</th><th>Endpoint</th></tr></thead>
+          <thead><tr><th>データセット</th><th>形式</th><th>更新</th><th>状態</th><th>エンドポイント</th></tr></thead>
           <tbody id="datasetRows">
-            <tr><td colspan="5" class="loading-state">Loading catalog</td></tr>
+            <tr><td colspan="5" class="loading-state">カタログを読み込み中</td></tr>
           </tbody>
         </table>
       </div>
       <div id="datasetEmpty" class="empty-state" hidden>
-        <strong>No datasets published</strong>
+        <strong>公開データなし</strong>
         <span>公開データ準備中</span>
       </div>
-      <p class="catalog-meta">Catalog <a href="public-data/catalog.json"><code>/public-data/catalog.json</code></a> <span aria-hidden="true">·</span> Updated <time id="lastUpdated">—</time></p>
+      <p class="catalog-meta">カタログ <a href="public-data/catalog.json"><code>/public-data/catalog.json</code></a> <span aria-hidden="true">·</span> 更新 <time id="lastUpdated">—</time></p>
     </section>
 
     <section class="section" aria-labelledby="quick-title">
-      <div class="section-heading"><div><p class="section-kicker">LINKS</p><h2 id="quick-title">Quick Access</h2></div></div>
+      <div class="section-heading"><div><p class="section-kicker">リンク</p><h2 id="quick-title">クイックアクセス</h2></div></div>
       <div class="quick-grid">
-        <a class="quick-link" href="data-guide.html"><strong>Data Format</strong><span>Schema / Rules</span><code>/data-guide.html</code></a>
-        <a class="quick-link" href="svgmap-guide.html"><strong>SVGMap Guide</strong><span>Integration / Fetch</span><code>/svgmap-guide.html</code></a>
-        <a class="quick-link" href="public-data/catalog.json"><strong>Public Catalog</strong><span>JSON / Dataset index</span><code>/public-data/catalog.json</code></a>
-        <a class="quick-link" href="https://github.com/MOSA-github/data_test_server_page"><strong>GitHub</strong><span>Public release</span><code>MOSA-github/data_test_server_page</code></a>
+        <a class="quick-link" href="data-guide.html"><strong>データ仕様</strong><span>スキーマ / 共通ルール</span><code>/data-guide.html</code></a>
+        <a class="quick-link" href="svgmap-guide.html"><strong>SVGMap連携</strong><span>取得 / マッピング</span><code>/svgmap-guide.html</code></a>
+        <a class="quick-link" href="public-data/catalog.json"><strong>公開カタログ</strong><span>JSON / データセット一覧</span><code>/public-data/catalog.json</code></a>
+        <a class="quick-link" href="https://github.com/MOSA-github/data_test_server_page"><strong>GitHub</strong><span>公開リポジトリ</span><code>MOSA-github/data_test_server_page</code></a>
       </div>
     </section>
 
-    <aside class="boundary-note"><span class="badge badge-neutral">PUBLIC RELEASE ONLY</span><span>Internal data / credentials / management are not published</span></aside>
+    <aside class="boundary-note"><span class="badge badge-neutral">公開データ限定</span><span>内部データ / 認証情報 / 管理機能は非公開</span></aside>
   </main>
 
-  <footer><span>MOSAdemy Data Platform</span><a href="https://mosa-github.github.io/data_test_server_page/">GitHub Pages</a></footer>
+  <footer><span>MOSAdemy Data Platform</span><a href="https://mosa-github.github.io/data_test_server_page/">公開ページ</a></footer>
   <script src="assets/site.js"></script>
 </body>
 </html>

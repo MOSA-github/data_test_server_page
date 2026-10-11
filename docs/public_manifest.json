@@ -3,18 +3,18 @@
   "files": [
     {
       "path": "index.html",
-      "bytes": 3324,
-      "sha256": "e7b8417163affd3dba5fa8816dbb01ef391e607cc34f1991c9ca407a6b54e8c8"
+      "bytes": 3466,
+      "sha256": "a135e0f015e604cc0c35387bd33a3f377a8d383c5c79f6740a5e893d1708319f"
     },
     {
       "path": "data-guide.html",
-      "bytes": 2717,
-      "sha256": "0e096f5d738a43390eefbfd202d45ab707558fa45914ba4059a1a98e60c331d2"
+      "bytes": 2843,
+      "sha256": "990d92095a656926dc417b89df6f0c32f99824d57391c0334b15479edda2e8c3"
     },
     {
       "path": "svgmap-guide.html",
-      "bytes": 4311,
-      "sha256": "73af65adb733ac63f6aa8bfd054eae79bd9ee50c73547b33660348fff4ca96d2"
+      "bytes": 4527,
+      "sha256": "18ed8a38de9ae0c81e7202989062cadb52783de0a1f03544334ad66ff8d31e30"
     },
     {
       "path": "assets/site.css",
@@ -23,8 +23,8 @@
     },
     {
       "path": "assets/site.js",
-      "bytes": 3204,
-      "sha256": "7e0d9850d89bbddf0278be02ef305d23809d0356aedf3adc1f9c579696ce2620"
+      "bytes": 3196,
+      "sha256": "13118fa0ae9829560dc50787469757d565b3c8cdd39ea3335f009df0b9acd917"
     },
     {
       "path": "public-data/catalog.json",

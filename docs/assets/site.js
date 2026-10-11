@@ -33,7 +33,7 @@ function renderCatalog(data) {
   const updated = document.querySelector("#lastUpdated");
   const total = data.datasets.length;
 
-  if (count) count.textContent = `${total} dataset${total === 1 ? "" : "s"}`;
+  if (count) count.textContent = `${total}件`;
   if (updated) updated.textContent = data.generated_at || "—";
   if (!rows) return;
 
@@ -59,7 +59,7 @@ function renderCatalog(data) {
     endpoint.textContent = url.pathname;
     const endpointCell = document.createElement("td");
     endpointCell.append(endpoint);
-    const status = textElement("span", "PUBLIC", "badge badge-public");
+    const status = textElement("span", "公開", "badge badge-public");
     const statusCell = document.createElement("td");
     statusCell.append(status);
 
@@ -75,12 +75,12 @@ function renderCatalog(data) {
 function renderCatalogError() {
   const count = document.querySelector("#datasetCount");
   const rows = document.querySelector("#datasetRows");
-  if (count) count.textContent = "Unavailable";
+  if (count) count.textContent = "取得エラー";
   if (!rows) return;
   rows.replaceChildren();
   const cell = document.createElement("td");
   cell.colSpan = 5;
-  cell.append(textElement("span", "CATALOG ERROR", "badge badge-error"), document.createTextNode("  Public catalog unavailable"));
+  cell.append(textElement("span", "取得エラー", "badge badge-error"), document.createTextNode("  公開カタログを取得できません"));
   const row = document.createElement("tr");
   row.append(cell);
   rows.append(row);
