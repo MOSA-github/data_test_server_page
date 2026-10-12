@@ -52,8 +52,29 @@
       <div class="section-heading"><div><p class="section-kicker">マッピング</p><h2 id="mapping-title">連携フロー</h2></div></div>
       <ol class="steps"><li><span>01</span><div><strong>選択</strong><small>カタログからURLを選択</small></div></li><li><span>02</span><div><strong>取得</strong><small>定義形式に従いJSONまたはCSVを取得</small></div></li><li><span>03</span><div><strong>検証</strong><small>座標と必須フィールドを確認</small></div></li><li><span>04</span><div><strong>描画</strong><small>安定IDをPOIキーとして使用</small></div></li></ol>
       <p class="note">更新失敗時は最後に取得できた表示を保持し エラー状態を表示</p>
+      <div class="table-shell"><table><thead><tr><th>項目</th><th>カタログ定義</th></tr></thead><tbody><tr><td>データセットID</td><td><code>datasets[].id</code></td></tr><tr><td>公開URL・形式</td><td><code>url</code> / <code>format</code></td></tr><tr><td>結合キー</td><td><code>sensor_id</code>または<code>facility_id</code></td></tr><tr><td>計測値</td><td><code>value</code> / <code>unit</code></td></tr><tr><td>日時・状態</td><td><code>measured_at</code> / <code>status</code></td></tr><tr><td>座標</td><td>承認済み施設マスター</td></tr><tr><td>更新</td><td>各データセットの推奨間隔</td></tr></tbody></table></div>
     </section>
   </main>
+  <section class="section" style="max-width:1180px;margin:auto"><h2>承認済みデータの取得・POI更新</h2><p>施設座標は公開承認されたマスターから取得し、<code>facility_id</code>で結合します。センサは<code>sensor_id</code>で識別します。座標未承認のセンサはPOIに描画しません。</p><pre><code>import { loadApprovedSensors, updatePoiLayer, showSensor } from
+  'https://mosa-github.github.io/data_test_server_page/assets/svgmap-data.js';
+
+// svgDocument: MOSAdemyレイヤーのSVG文書（sensor-rootを持つ）
+// iconUrl: そのレイヤーで利用する既存アイコンURL
+// popup: 既存POIハンドラーが使う表示コンテナ
+async function refresh() {
+  try {
+    const sensors = await loadApprovedSensors();
+    updatePoiLayer(svgDocument, sensors, iconUrl, svgMap);
+    const selected = sensors.find(s =&gt; s.id === selectedSensorId);
+    if (selected) showSensor(popup, selected);
+  } catch (error) {
+    console.error('公開データ更新失敗'); // 現在のPOIを保持
+  }
+}
+await refresh();
+setInterval(refresh, 180000);
+// 既存SVGMap: svgMap.setShowPoiProperty(handler, layerId) で
+// POIのdata-sensor-idを選択しshowSensorへ渡す。</code></pre><p>最新値: <a href="public-data/latest.json">public-data/latest.json</a> / 履歴: <a href="public-data/history.csv">public-data/history.csv</a> / 座標: <a href="public-data/locations.json">public-data/locations.json</a> / 許諾済み画像: <a href="public-data/cameras.json">public-data/cameras.json</a></p></section>
   <footer><a href="index.html">← 概要</a><a href="data-guide.html">データ仕様</a></footer>
   <script src="assets/site.js"></script>
 </body>

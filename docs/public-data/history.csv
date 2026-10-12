@@ -1,0 +1,2 @@
+sensor_id,facility_id,name,type,measured_at,value,unit,status
+3,1,燃料残量,generator,2026-10-12T21:20:55.389329Z,3232.852,L,normal
