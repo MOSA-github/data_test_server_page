@@ -1,4 +1,26 @@
-# Energy Monitor Cloud
+# MOSAdemy 公開データ
+
+現行の公開ページは、Private側のDBで公開承認されたセンサデータとカメラ静止画を配信します。水位・消費電力・発電機／燃料残量・カメラが対象です。公開ページの最新版では数値と画像を表示し、未公開の項目は「データなし」と表示します。
+
+| 生成ファイル | 公開URL |
+| --- | --- |
+| `docs/public-data/catalog.json` | [データセット一覧](https://mosa-github.github.io/data_test_server_page/public-data/catalog.json) |
+| `docs/public-data/latest.json` | [センサ最新値](https://mosa-github.github.io/data_test_server_page/public-data/latest.json) |
+| `docs/public-data/history.csv` | [計測履歴](https://mosa-github.github.io/data_test_server_page/public-data/history.csv) |
+| `docs/public-data/locations.json` | [公開座標](https://mosa-github.github.io/data_test_server_page/public-data/locations.json) |
+| `docs/public-data/cameras.json` | [カメラ画像一覧](https://mosa-github.github.io/data_test_server_page/public-data/cameras.json) |
+
+最新値の項目は`sensor_id / facility_id / name / type / value / unit / measured_at / status`。燃料残量は`type: generator`で、単位は各レコードの`unit`を使用します。カメラ一覧は数値の代わりに公開静止画の`image_url`を持ちます。SVGMapは`sensor_id`／`facility_id`で結合します。
+
+反映手順：Private側でデータ取得・保存 → 公開を承認 → 今すぐ同期 → 本リポジトリのDeploy GitHub Pagesが成功。カメラは「画像再配布の許諾を確認済み」も必要です。取得元URL・認証情報は公開しません。
+
+`docs/`は既存Actionsの生成物です。UI原本はPrivate側の`public_site/`で修正し、データをここで手編集しません。
+
+## 旧消費電力プロトタイプの参考資料
+
+以下は旧構成の説明です。現行のURL・データ形式・更新手順は上記および公開ページの「公開データ」「SVGMap」を参照してください。
+
+### Energy Monitor Cloud（旧構成）
 
 MOSAdemyで利用する消費電力データを，GitHub Pages上で参照できる形に整理・公開するための簡易データ配信リポジトリです．
 

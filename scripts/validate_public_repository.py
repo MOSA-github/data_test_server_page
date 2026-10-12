@@ -17,14 +17,29 @@ ALLOWED_TRACKED = {
     ".github/workflows/deploy-pages.yml",
     "README.md",
     "scripts/validate_public_repository.py",
+    "tests/test_public_repository.py",
     "docs/index.html",
     "docs/data-guide.html",
     "docs/svgmap-guide.html",
     "docs/assets/site.css",
     "docs/assets/site.js",
+    "docs/assets/svgmap-data.js",
     "docs/public-data/catalog.json",
     "docs/public_manifest.json",
 }
+
+GENERATED_TRACKED = {
+    "docs/public-data/latest.json",
+    "docs/public-data/history.csv",
+    "docs/public-data/locations.json",
+    "docs/public-data/cameras.json",
+}
+
+
+def permitted_file(relative: str) -> bool:
+    return relative in ALLOWED_TRACKED or relative in GENERATED_TRACKED or bool(
+        re.fullmatch(r"docs/public-data/images/[a-f0-9]{32}\.(?:png|jpg)", relative)
+    )
 
 BLOCKED_PARTS = {
     "admin",
@@ -63,7 +78,7 @@ def sha256(path: Path) -> str:
 
 def validate() -> None:
     tracked = tracked_files()
-    unexpected = sorted(tracked - ALLOWED_TRACKED)
+    unexpected = sorted(relative for relative in tracked if not permitted_file(relative))
     missing = sorted(ALLOWED_TRACKED - tracked)
     if unexpected or missing:
         raise SystemExit(f"Public allowlist mismatch; unexpected={unexpected}, missing={missing}")
