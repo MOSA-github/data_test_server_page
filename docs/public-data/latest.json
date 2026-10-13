@@ -4,9 +4,9 @@
     "facility_id": "1",
     "name": "燃料残量",
     "type": "generator",
-    "value": 3232.852,
+    "value": 3232.9,
     "unit": "L",
-    "measured_at": "2026-10-13T03:03:25.921964Z",
+    "measured_at": "2026-10-13T04:24:57.098760Z",
     "status": "normal"
   },
   {
@@ -14,9 +14,9 @@
     "facility_id": "1",
     "name": "水位残量",
     "type": "water",
-    "value": 45.537,
+    "value": 45.5,
     "unit": "%",
-    "measured_at": "2026-10-13T03:03:25.921964Z",
+    "measured_at": "2026-10-13T04:24:57.098760Z",
     "status": "normal"
   }
 ]
