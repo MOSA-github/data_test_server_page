@@ -180,7 +180,8 @@ function renderOverviewError(selector) {
   for (const container of document.querySelectorAll(selector)) {
     container.replaceChildren(textElement("p", "取得エラー：公開データを読み込めません", "data-message data-error"));
   }
-  if (selector === "#cameraImages") document.querySelector("#cameraCount").textContent = "取得エラー";
+  const count = document.querySelector("#cameraCount");
+  if (selector === "#cameraImages" && count) count.textContent = "取得エラー";
 }
 
 function loadOverview(catalog) {
