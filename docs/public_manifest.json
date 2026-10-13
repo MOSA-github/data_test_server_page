@@ -13,8 +13,8 @@
     },
     {
       "path": "svgmap-guide.html",
-      "bytes": 7932,
-      "sha256": "7d5f2f44eeb7c8dc92de84e76ef90a24138fcfbd8bdd13059d73b2bd5f9b0684"
+      "bytes": 8556,
+      "sha256": "e129b2222b31241b48e016987538169e92f5580cdab2d311c6df3f69a5f7fe1c"
     },
     {
       "path": "assets/site.css",
@@ -28,28 +28,28 @@
     },
     {
       "path": "assets/svgmap-data.js",
-      "bytes": 3980,
-      "sha256": "bbd39f73982677b289cd5b50da72a833c7187f9fb98b9f10361f927db743803a"
+      "bytes": 4193,
+      "sha256": "f218efb1ef757a1eb39d631cefbe4ec9312cd934340bf8599ec966c71304b030"
     },
     {
       "path": "public-data/catalog.json",
-      "bytes": 2714,
-      "sha256": "61581b73fbf3b2163de69d42a3e8bd83033d60156921d4a9a6cf69111da7508c"
+      "bytes": 2908,
+      "sha256": "9a87cdc136350f5f5d270f899c154458c92e14b9a11f8a3846a0f16e7f251018"
     },
     {
       "path": "public-data/latest.json",
-      "bytes": 643,
-      "sha256": "2ebd45ef88dc25046a44ba2b0a42f4c72d53d2c730ffb3e3ec2f9f1ba6d7830b"
+      "bytes": 658,
+      "sha256": "c321a5c240d852bb3eb1556c21a8f67c0c751c073c218057ceb2b61170a33fb1"
     },
     {
       "path": "public-data/cameras.json",
-      "bytes": 876,
-      "sha256": "b9455a3edf916798c1a7fcb91c7f88d23eb53485426f82f529e0fc59d2b03fbc"
+      "bytes": 886,
+      "sha256": "7d508860b3525692de7ebfb0c4b786866213c20c85d1268e62e01445b75a42cc"
     },
     {
       "path": "public-data/history.csv",
-      "bytes": 1177,
-      "sha256": "4fe8ad9a6dd3042aed502dcd0c313286b34203da9219f341b125819ccf924800"
+      "bytes": 1257,
+      "sha256": "e72377208eb2a60333e7e63fe2e822c8f19c63ce0468a190fa083cfd1af43268"
     },
     {
       "path": "public-data/locations.json",
@@ -58,13 +58,13 @@
     },
     {
       "path": "public-data/images/d4735e3a265e16eee03f59718b9b5d03.jpg",
-      "bytes": 194168,
-      "sha256": "3dc8ac448241562c80f4aa043fec54e8dd5c53a515439421a67085fbb9c7272a"
+      "bytes": 194332,
+      "sha256": "dcfe3fc21306c6ea55803bd1ac6ac93037b3dc0885c63bce436ac2eabe8b0803"
     },
     {
       "path": "public-data/images/6b86b273ff34fce19d6b804eff5a3f57.jpg",
-      "bytes": 124037,
-      "sha256": "41db1c209fd8c2d29646af229fea462c4cee1cfb994fe33c4f737f450fc20682"
+      "bytes": 127019,
+      "sha256": "b128d69220b75750c25b589f59b02ed9f6c5d72b39b150c6a6ae21f6772954e1"
     }
   ]
 }

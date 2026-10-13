@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-13T12:11:27.878208Z",
+  "generated_at": "2026-10-13T23:00:06.856143+09:00",
   "datasets": [
     {
       "id": "latest",
@@ -8,7 +8,7 @@
       "type": "measurement",
       "format": "json",
       "url": "https://mosa-github.github.io/data_test_server_page/public-data/latest.json",
-      "updated_at": "2026-10-13T10:20:23.356315Z",
+      "updated_at": "2026-10-13T19:20:23.356315+09:00",
       "sensor_id_field": "sensor_id",
       "facility_id_field": "facility_id",
       "value_field": "value",
@@ -17,6 +17,7 @@
       "status_field": "status",
       "coordinate_source": "https://mosa-github.github.io/data_test_server_page/public-data/locations.json",
       "refresh_seconds": 180,
+      "timezone": "Asia/Tokyo",
       "svgmap": true
     },
     {
@@ -25,7 +26,7 @@
       "type": "measurement",
       "format": "csv",
       "url": "https://mosa-github.github.io/data_test_server_page/public-data/history.csv",
-      "updated_at": "2026-10-13T10:20:23.356315Z",
+      "updated_at": "2026-10-13T19:20:23.356315+09:00",
       "sensor_id_field": "sensor_id",
       "facility_id_field": "facility_id",
       "value_field": "value",
@@ -34,6 +35,7 @@
       "status_field": "status",
       "coordinate_source": "https://mosa-github.github.io/data_test_server_page/public-data/locations.json",
       "refresh_seconds": 180,
+      "timezone": "Asia/Tokyo",
       "svgmap": true
     },
     {
@@ -51,7 +53,9 @@
       "status_field": "status",
       "coordinate_source": "https://mosa-github.github.io/data_test_server_page/public-data/locations.json",
       "refresh_seconds": 180,
-      "svgmap": true
+      "timezone": "Asia/Tokyo",
+      "svgmap": true,
+      "facility_name_field": "facility_name"
     },
     {
       "id": "cameras",
@@ -59,7 +63,7 @@
       "type": "camera",
       "format": "json",
       "url": "https://mosa-github.github.io/data_test_server_page/public-data/cameras.json",
-      "updated_at": "2026-10-13T12:11:27.878208Z",
+      "updated_at": "2026-10-13T23:00:06.856143+09:00",
       "sensor_id_field": "sensor_id",
       "facility_id_field": "facility_id",
       "value_field": "value",
@@ -68,6 +72,7 @@
       "status_field": "status",
       "coordinate_source": "https://mosa-github.github.io/data_test_server_page/public-data/locations.json",
       "refresh_seconds": 180,
+      "timezone": "Asia/Tokyo",
       "svgmap": true,
       "image_url_field": "image_url",
       "latitude_field": "latitude",
