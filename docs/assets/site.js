@@ -1,5 +1,7 @@
 const catalogUrl = "public-data/catalog.json";
 const publicDataRoot = new URL("public-data/", window.location.href);
+const refreshIntervalMs = 180000;
+let refreshInProgress = false;
 
 async function loadCatalog() {
   const response = await fetch(`${catalogUrl}?t=${Date.now()}`, { cache: "no-store" });
@@ -163,6 +165,8 @@ function renderCameras(records) {
       image.loading = "lazy";
       image.referrerPolicy = "no-referrer";
       image.addEventListener("error", () => frame.replaceChildren(textElement("p", "画像を取得できません", "data-message")), { once: true });
+      // The generated image path is stable; change its cache key with the snapshot.
+      url.searchParams.set("t", record.measured_at || Date.now());
       image.src = url.href;
       frame.append(image);
     } else {
@@ -184,16 +188,42 @@ function renderOverviewError(selector) {
   if (selector === "#cameraImages" && count) count.textContent = "取得エラー";
 }
 
-function loadOverview(catalog) {
-  if (!document.querySelector("#measurementGroups")) return;
-  loadPublicRecords(catalog, "latest").then(renderMeasurements).catch(() => renderOverviewError(".sensor-records"));
-  loadPublicRecords(catalog, "cameras").then(renderCameras).catch(() => renderOverviewError("#cameraImages"));
+async function loadOverview(catalog) {
+  if (!document.querySelector("#measurementGroups")) return true;
+  const results = await Promise.all([
+    loadPublicRecords(catalog, "latest").then(records => { renderMeasurements(records); return true; }).catch(() => {
+      if (!document.querySelector(".sensor-record")) renderOverviewError(".sensor-records");
+      return false;
+    }),
+    loadPublicRecords(catalog, "cameras").then(records => { renderCameras(records); return true; }).catch(() => {
+      if (!document.querySelector(".camera-card")) renderOverviewError("#cameraImages");
+      return false;
+    })
+  ]);
+  return results.every(Boolean);
+}
+
+async function refreshPublicPage() {
+  if (refreshInProgress) return;
+  refreshInProgress = true;
+  const state = document.querySelector("#pageRefreshState");
+  try {
+    const data = await loadCatalog();
+    renderCatalog(data);
+    const succeeded = await loadOverview(data);
+    if (state) state.textContent = succeeded ? "3分ごとに自動更新" : "更新失敗：再取得を待機";
+  } catch {
+    renderCatalogError();
+    if (!document.querySelector(".sensor-record")) renderOverviewError(".sensor-records");
+    if (!document.querySelector(".camera-card")) renderOverviewError("#cameraImages");
+    if (state) state.textContent = "更新失敗：再取得を待機";
+  } finally {
+    refreshInProgress = false;
+  }
 }
 
 if (document.querySelector("#datasetRows")) {
-  loadCatalog().then(data => { renderCatalog(data); loadOverview(data); }).catch(() => {
-    renderCatalogError();
-    renderOverviewError(".sensor-records");
-    renderOverviewError("#cameraImages");
-  });
+  refreshPublicPage();
+  setInterval(() => { if (!document.hidden) refreshPublicPage(); }, refreshIntervalMs);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshPublicPage(); });
 }

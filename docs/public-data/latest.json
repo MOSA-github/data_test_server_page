@@ -6,7 +6,17 @@
     "type": "generator",
     "value": 3232.852,
     "unit": "L",
-    "measured_at": "2026-10-12T23:24:58.943566Z",
+    "measured_at": "2026-10-13T03:03:25.921964Z",
+    "status": "normal"
+  },
+  {
+    "sensor_id": "4",
+    "facility_id": "1",
+    "name": "水位残量",
+    "type": "water",
+    "value": 45.537,
+    "unit": "%",
+    "measured_at": "2026-10-13T03:03:25.921964Z",
     "status": "normal"
   }
 ]
