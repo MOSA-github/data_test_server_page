@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-13T05:07:42.093421Z",
+  "generated_at": "2026-10-13T09:01:13.681667Z",
   "datasets": [
     {
       "id": "latest",
@@ -52,6 +52,26 @@
       "coordinate_source": "https://mosa-github.github.io/data_test_server_page/public-data/locations.json",
       "refresh_seconds": 180,
       "svgmap": true
+    },
+    {
+      "id": "cameras",
+      "name": "カメラ画像",
+      "type": "camera",
+      "format": "json",
+      "url": "https://mosa-github.github.io/data_test_server_page/public-data/cameras.json",
+      "updated_at": "2026-10-13T09:01:13.681667Z",
+      "sensor_id_field": "sensor_id",
+      "facility_id_field": "facility_id",
+      "value_field": "value",
+      "unit_field": "unit",
+      "timestamp_field": "measured_at",
+      "status_field": "status",
+      "coordinate_source": "https://mosa-github.github.io/data_test_server_page/public-data/locations.json",
+      "refresh_seconds": 180,
+      "svgmap": true,
+      "image_url_field": "image_url",
+      "latitude_field": "latitude",
+      "longitude_field": "longitude"
     }
   ]
 }

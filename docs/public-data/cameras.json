@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "sensor_id": "1",
+    "facility_id": "1",
+    "name": "カメラ１",
+    "type": "camera",
+    "latitude": 34.6507388,
+    "longitude": 133.9158887,
+    "image_url": "https://mosa-github.github.io/data_test_server_page/public-data/images/6b86b273ff34fce19d6b804eff5a3f57.jpg",
+    "content_type": "image/jpeg",
+    "width": 1920,
+    "height": 1080,
+    "measured_at": "2026-10-13T09:01:13.681667Z",
+    "status": "normal"
+  },
+  {
+    "sensor_id": "2",
+    "facility_id": "1",
+    "name": "カメラ２",
+    "type": "camera",
+    "latitude": 34.6507388,
+    "longitude": 133.9158887,
+    "image_url": "https://mosa-github.github.io/data_test_server_page/public-data/images/d4735e3a265e16eee03f59718b9b5d03.jpg",
+    "content_type": "image/jpeg",
+    "width": 1920,
+    "height": 1080,
+    "measured_at": "2026-10-13T08:58:46.761742Z",
+    "status": "normal"
+  }
+]
