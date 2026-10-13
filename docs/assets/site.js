@@ -170,11 +170,16 @@ function renderCameras(records) {
       image.src = url.href;
       frame.append(image);
     } else {
-      frame.append(textElement("p", "画像を取得できません", "data-message"));
+      frame.append(textElement("p", record.image_url ? "画像を取得できません" : "画像データなし", "data-message"));
     }
     const info = document.createElement("div");
     info.className = "camera-info";
     info.append(textElement("h3", record.name || record.sensor_id), ...recordMetadata(record));
+    if (Number.isFinite(record.latitude) && Number.isFinite(record.longitude)) info.append(textElement("p", `座標: ${record.latitude}, ${record.longitude}`, "record-meta"));
+    if (url) {
+      const link = document.createElement("a");link.href = url.href;link.textContent = "公開画像URL";link.target = "_blank";link.rel = "noreferrer";
+      info.append(link);
+    }
     card.append(frame, info);
     container.append(card);
   }

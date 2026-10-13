@@ -13,8 +13,8 @@
     },
     {
       "path": "svgmap-guide.html",
-      "bytes": 6778,
-      "sha256": "330097dcd2f98e2bf9780e4babb11037e2ce7ace75fda85cf3ef791129a06365"
+      "bytes": 7932,
+      "sha256": "7d5f2f44eeb7c8dc92de84e76ef90a24138fcfbd8bdd13059d73b2bd5f9b0684"
     },
     {
       "path": "assets/site.css",
@@ -23,13 +23,13 @@
     },
     {
       "path": "assets/site.js",
-      "bytes": 10085,
-      "sha256": "a95b2fb801cc4e670613e778aa2b2bd3111ba15660273f095176ad442ba82bdf"
+      "bytes": 10505,
+      "sha256": "f5d0aa0e3939ded1f8bc203543e1402f42f2b4efb089ad8f5eb492c17ebd7caf"
     },
     {
       "path": "assets/svgmap-data.js",
-      "bytes": 3423,
-      "sha256": "58547094051f436dff2b65ab7785dbe30a62151ff78b897e8732ddb32f52552c"
+      "bytes": 3685,
+      "sha256": "562432e1872f55cae894b937884e2d052e331c700be27319f854968f09979666"
     },
     {
       "path": "public-data/catalog.json",

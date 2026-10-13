@@ -75,6 +75,13 @@ await refresh();
 setInterval(refresh, 180000);
 // 既存SVGMap: svgMap.setShowPoiProperty(handler, layerId) で
 // POIのdata-sensor-idを選択しshowSensorへ渡す。</code></pre><p>最新値: <a href="public-data/latest.json">public-data/latest.json</a> / 履歴: <a href="public-data/history.csv">public-data/history.csv</a> / 座標: <a href="public-data/locations.json">public-data/locations.json</a> / 許諾済み画像: <a href="public-data/cameras.json">public-data/cameras.json</a></p></section>
+  <section class="section" style="max-width:1180px;margin:auto"><h2>カメラJSON</h2><p><a href="public-data/cameras.json">public-data/cameras.json</a>の<code>sensor_id</code>をPOIキー、<code>facility_id</code>を施設結合キーとして使用。座標は<code>latitude</code> / <code>longitude</code>、公開画像の取得URLは<code>image_url</code>です。</p><pre><code>{
+  "sensor_id": "CAM-X", "facility_id": "HOSP-X", "type": "camera",
+  "name": "試験カメラ", "latitude": 34.65, "longitude": 133.92,
+  "image_url": "https://mosa-github.github.io/data_test_server_page/public-data/images/0123456789abcdef0123456789abcdef.png",
+  "content_type": "image/png", "width": 32, "height": 24,
+  "measured_at": "2026-10-13T08:00:00Z", "status": "normal"
+}</code></pre><p>上記は形式の例です。実際の画像URLはJSONから取得してください。座標未承認は<code>null</code>。画像未取得・再配布未承認は<code>image_url: null</code>、<code>status: "no_data"</code>です。元のカメラURLやtokenは公開しません。推奨更新180秒。公開画像は同期時点の静止画です。</p></section>
   <footer><a href="index.html">← 概要</a><a href="data-guide.html">データ仕様</a></footer>
   <script src="assets/site.js"></script>
 </body>
