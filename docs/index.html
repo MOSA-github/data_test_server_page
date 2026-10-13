@@ -23,7 +23,28 @@
     <section class="page-intro" aria-labelledby="page-title">
       <p class="eyebrow">公開データ</p>
       <h1 id="page-title">MOSAdemy 公開データ</h1>
-      <p class="lead">JSON / CSV / SVGMap</p>
+      <p class="lead">センサ最新値 / カメラ画像 / SVGMap</p>
+    </section>
+
+    <section class="section" aria-labelledby="measurements-title">
+      <div class="section-heading">
+        <div><p class="section-kicker">センサ</p><h2 id="measurements-title">最新値</h2></div>
+        <span class="count">公開承認済みのデータ</span>
+      </div>
+      <div class="measurement-grid" id="measurementGroups" aria-live="polite">
+        <article class="measurement-group" data-sensor-type="water"><h3>貯水・水位</h3><div class="sensor-records"><p class="data-message">読み込み中</p></div></article>
+        <article class="measurement-group" data-sensor-type="power"><h3>消費電力</h3><div class="sensor-records"><p class="data-message">読み込み中</p></div></article>
+        <article class="measurement-group" data-sensor-type="generator"><h3>発電機・燃料残量</h3><div class="sensor-records"><p class="data-message">読み込み中</p></div></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="cameras-title">
+      <div class="section-heading">
+        <div><p class="section-kicker">画像</p><h2 id="cameras-title">カメラ</h2></div>
+        <span class="count" id="cameraCount">—件</span>
+      </div>
+      <div id="cameraImages" class="camera-grid" aria-live="polite"><p class="data-message">読み込み中</p></div>
+      <p class="note">公開・画像再配布が承認された静止画のみ表示</p>
     </section>
 
     <section class="section" aria-labelledby="datasets-title">
