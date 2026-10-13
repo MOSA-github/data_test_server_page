@@ -2,7 +2,7 @@
 
 現行の公開ページは、Private側のDBで公開承認されたセンサデータとカメラ静止画を配信します。水位・消費電力・発電機／燃料残量・カメラが対象です。公開ページの最新版では数値と画像を表示し、未公開の項目は「データなし」と表示します。
 
-承認済みデータは30分ごと（毎時17分・47分）に既存Actionsで自動同期されます。表示中の公開ページは3分ごとに再取得し、失敗時は前回の値・画像を保持します。即時公開ではなく、[GitHubの定期実行](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)には遅延する場合があります。急ぐ場合はPrivate側の「今すぐ同期」を使用してください。追加のサーバー設定は不要です。
+承認済みデータは5分ごと（毎時2分から5分刻み）に既存Actionsで自動同期されます。表示中の公開ページは3分ごとに再取得し、失敗時は前回の値・画像を保持します。即時公開ではなく、[GitHubの定期実行](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)には遅延する場合があります。急ぐ場合はPrivate側の管理画面 →「公開同期」→「今すぐ同期」を使用してください。追加のサーバー設定は不要です。
 
 | 生成ファイル | 公開URL |
 | --- | --- |
