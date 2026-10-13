@@ -24,6 +24,8 @@ export function updatePoiLayer(svgDocument,sensors,iconUrl,svgMap){
 }
 
 export function showSensor(container,sensor){
-  container.replaceChildren();const label=document.createElement('p');label.textContent=`${sensor.name}: ${sensor.value??'—'} ${sensor.unit} / ${sensor.updated_at}`;container.append(label);
+  container.replaceChildren();const label=document.createElement('p'),date=new Date(sensor.updated_at);
+  const stamp=sensor.updated_at&&!Number.isNaN(date.getTime())?new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(date)+'（日本時間）':'—';
+  label.textContent=`${sensor.name}: ${sensor.value??'—'} ${sensor.unit} / ${stamp}`;container.append(label);
   for(const camera of sensor.cameras){const image=document.createElement('img');image.src=camera.image_url;image.alt=camera.name;image.style.maxWidth='100%';image.style.objectFit='contain';container.append(image)}
 }

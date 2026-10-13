@@ -1,4 +1,5 @@
 sensor_id,facility_id,name,type,measured_at,value,unit,status
+3,1,燃料残量,generator,2026-10-13T10:20:23.356315Z,3232.9,L,normal
 3,1,燃料残量,generator,2026-10-13T05:05:36.395111Z,3232.9,L,normal
 3,1,燃料残量,generator,2026-10-13T04:55:58.509024Z,3232.9,L,normal
 3,1,燃料残量,generator,2026-10-13T04:24:57.098760Z,3232.9,L,normal
@@ -7,8 +8,10 @@ sensor_id,facility_id,name,type,measured_at,value,unit,status
 3,1,燃料残量,generator,2026-10-13T02:45:25.766472Z,3232.852,L,normal
 3,1,燃料残量,generator,2026-10-12T23:24:58.943566Z,3232.852,L,normal
 3,1,燃料残量,generator,2026-10-12T21:20:55.389329Z,3232.852,L,normal
+4,1,水位残量,water,2026-10-13T10:20:23.356315Z,45.5,%,normal
 4,1,水位残量,water,2026-10-13T05:05:36.395111Z,45.5,%,normal
 4,1,水位残量,water,2026-10-13T04:55:58.509024Z,45.5,%,normal
 4,1,水位残量,water,2026-10-13T04:24:57.098760Z,45.5,%,normal
 4,1,水位残量,water,2026-10-13T03:03:25.921964Z,45.537,%,normal
+5,1,電力,power,2026-10-13T10:20:23.356315Z,7031.8,W,normal
 5,1,電力,power,2026-10-13T05:07:42.093421Z,7031.8,W,normal

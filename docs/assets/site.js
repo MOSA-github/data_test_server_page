@@ -20,6 +20,17 @@ function textElement(name, value, className) {
   return element;
 }
 
+function formatTokyoTimestamp(value) {
+  if (!value) return "—";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
+  return new Intl.DateTimeFormat("ja-JP", {
+    timeZone: "Asia/Tokyo", hourCycle: "h23",
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit"
+  }).format(date);
+}
+
 function safePublicUrl(value) {
   try {
     const url = new URL(value, window.location.href);
@@ -37,7 +48,12 @@ function renderCatalog(data) {
   const total = data.datasets.length;
 
   if (count) count.textContent = `${total}件`;
-  if (updated) updated.textContent = data.generated_at || "—";
+  if (updated) {
+    const stamp = formatTokyoTimestamp(data.generated_at);
+    updated.textContent = stamp === "—" ? stamp : `${stamp}（日本時間）`;
+    if (stamp !== "—") updated.dateTime = data.generated_at;
+    else updated.removeAttribute("datetime");
+  }
   if (!rows) return;
 
   rows.replaceChildren();
@@ -120,9 +136,7 @@ async function loadPublicRecords(catalog, id) {
 
 function recordMetadata(record) {
   const metadata = textElement("p", `施設ID: ${record.facility_id ?? "—"} / センサID: ${record.sensor_id ?? "—"}`, "record-meta");
-  const date = new Date(record.measured_at);
-  const stamp = record.measured_at && !Number.isNaN(date.getTime())
-    ? new Intl.DateTimeFormat("ja-JP", { dateStyle: "short", timeStyle: "medium", timeZone: "Asia/Tokyo" }).format(date) : "—";
+  const stamp = formatTokyoTimestamp(record.measured_at);
   const time = textElement("time", `計測: ${stamp}（日本時間）`, "record-meta");
   if (stamp !== "—") time.dateTime = record.measured_at;
   return [metadata, time];
