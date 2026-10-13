@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-13T10:52:34.725024Z",
+  "generated_at": "2026-10-13T12:11:27.878208Z",
   "datasets": [
     {
       "id": "latest",
@@ -59,7 +59,7 @@
       "type": "camera",
       "format": "json",
       "url": "https://mosa-github.github.io/data_test_server_page/public-data/cameras.json",
-      "updated_at": "2026-10-13T10:52:34.725024Z",
+      "updated_at": "2026-10-13T12:11:27.878208Z",
       "sensor_id_field": "sensor_id",
       "facility_id_field": "facility_id",
       "value_field": "value",
