@@ -6,7 +6,7 @@
     "type": "generator",
     "value": 3232.9,
     "unit": "L",
-    "measured_at": "2026-10-13T04:24:57.098760Z",
+    "measured_at": "2026-10-13T05:05:36.395111Z",
     "status": "normal"
   },
   {
@@ -16,7 +16,17 @@
     "type": "water",
     "value": 45.5,
     "unit": "%",
-    "measured_at": "2026-10-13T04:24:57.098760Z",
+    "measured_at": "2026-10-13T05:05:36.395111Z",
+    "status": "normal"
+  },
+  {
+    "sensor_id": "5",
+    "facility_id": "1",
+    "name": "電力",
+    "type": "power",
+    "value": 7031.8,
+    "unit": "W",
+    "measured_at": "2026-10-13T05:07:42.093421Z",
     "status": "normal"
   }
 ]
