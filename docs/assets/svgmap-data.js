@@ -8,7 +8,8 @@ export async function loadApprovedSensors(catalogUrl=new URL('../public-data/cat
   const master=new Map(locations.map(l=>[l.facility_id,l]));
   return [...latest,...cameras].flatMap(row=>{const place=master.get(row.facility_id)||(row.type==='camera'?row:null);if(!place||!Number.isFinite(place.latitude)||!Number.isFinite(place.longitude)||Math.abs(place.latitude)>90||Math.abs(place.longitude)>180)return [];
     let images=[];if(row.image_url){const image=new URL(row.image_url,catalogLocation),imageRoot=catalogLocation.pathname.replace(/catalog\.json$/,'')+'images/';if(image.origin!==catalogLocation.origin||!image.pathname.startsWith(imageRoot)||! /^[a-f0-9]{32}\.(png|jpg)$/.test(image.pathname.slice(imageRoot.length))||image.search||image.hash||image.username||image.password)throw new Error('未承認画像URL');images=[{id:row.sensor_id,name:row.name,status:row.status,image_url:image.href,updated_at:row.measured_at}]}
-    return [{id:row.sensor_id,sensor_id:row.sensor_id,facility_id:row.facility_id,name:row.name,type:row.type,value:row.value??null,unit:row.unit||'',status:row.status,updated_at:row.measured_at,lat:place.latitude,lng:place.longitude,facility:{id:row.facility_id,name:place.facility_name||place.name||''},cameras:images}];});
+    const details=row.type==='outage'?{power_state:row.power_state||'UNKNOWN',switch_on:row.switch_on??null,ble_rssi:row.ble_rssi??null,node_rssi:row.node_rssi??null,is_demo:row.is_demo===true}:{};
+    return [{id:row.sensor_id,sensor_id:row.sensor_id,facility_id:row.facility_id,name:row.name,type:row.type,value:row.value??null,unit:row.unit||'',status:row.status,updated_at:row.measured_at,lat:place.latitude,lng:place.longitude,facility:{id:row.facility_id,name:place.facility_name||place.name||''},cameras:images,...details}];});
 }
 
 export function updatePoiLayer(svgDocument,sensors,iconUrl,svgMap){
@@ -18,7 +19,7 @@ export function updatePoiLayer(svgDocument,sensors,iconUrl,svgMap){
     poi.setAttribute('href',iconUrl);poi.setAttribute('x','-12');poi.setAttribute('y','-12');poi.setAttribute('width','24');poi.setAttribute('height','24');
     poi.setAttribute('transform',`ref(svg,${sensor.lng},${-sensor.lat})`);poi.setAttribute('data-mosademy','true');poi.setAttribute('data-sensor-id',sensor.id);
     poi.setAttribute('title',sensor.name||sensor.id);
-    poi.setAttribute('content',[`id=${encodeURIComponent(sensor.id)}`,`name=${encodeURIComponent(sensor.name)}`,`facility_id=${encodeURIComponent(sensor.facility.id)}`,`facility_name=${encodeURIComponent(sensor.facility.name)}`,`type=${sensor.type}`,`status=${sensor.status}`,`value=${sensor.value??''}`,`unit=${encodeURIComponent(sensor.unit)}`,`updated_at=${encodeURIComponent(sensor.updated_at)}`,`cameras=${encodeURIComponent(JSON.stringify(sensor.cameras))}`].join(','));root.appendChild(poi);}
+    poi.setAttribute('content',[`id=${encodeURIComponent(sensor.id)}`,`name=${encodeURIComponent(sensor.name)}`,`facility_id=${encodeURIComponent(sensor.facility.id)}`,`facility_name=${encodeURIComponent(sensor.facility.name)}`,`type=${sensor.type}`,`status=${sensor.status}`,`value=${sensor.value??''}`,`unit=${encodeURIComponent(sensor.unit)}`,`updated_at=${encodeURIComponent(sensor.updated_at)}`,`cameras=${encodeURIComponent(JSON.stringify(sensor.cameras))}`,...(sensor.type==='outage'?['power_state','switch_on','ble_rssi','node_rssi','is_demo'].map(key=>`${key}=${encodeURIComponent(sensor[key]??'')}`):[])].join(','));root.appendChild(poi);}
   // Existing SVGMap API, also used in MOSAdemy_SVGMap/js/live_sensor_layer.js.
   svgMap.refreshScreen();
 }
@@ -26,6 +27,8 @@ export function updatePoiLayer(svgDocument,sensors,iconUrl,svgMap){
 export function showSensor(container,sensor){
   container.replaceChildren();const label=document.createElement('p'),date=new Date(sensor.updated_at);
   const stamp=sensor.updated_at&&!Number.isNaN(date.getTime())?new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(date)+'（日本時間）':'—';
-  label.textContent=`${sensor.facility?.name?`${sensor.facility.name} / `:''}${sensor.name}: ${sensor.value??'—'} ${sensor.unit} / ${stamp}`;container.append(label);
+  const states={NORMAL:'通電・稼働','0W_ALERT':'0W・機器停止',SWITCH_OFF:'スイッチOFF',OFFLINE:'停電・通信途絶の疑い',BLE_WEAK:'BLE電波弱',NODE_WEAK:'中継器電波弱',UNKNOWN:'未確認'};
+  const reading=sensor.type==='outage'?`${sensor.is_demo?'【検証用・ダミー】 ':''}${states[sensor.power_state]||'未確認'} / ${['OFFLINE','UNKNOWN'].includes(sensor.power_state)?'欠損':sensor.value??'—'} ${sensor.unit}`:`${sensor.value??'—'} ${sensor.unit}`;
+  label.textContent=`${sensor.facility?.name?`${sensor.facility.name} / `:''}${sensor.name}: ${reading} / ${stamp}`;container.append(label);
   for(const camera of sensor.cameras){const image=document.createElement('img');image.src=camera.image_url;image.alt=camera.name;image.style.maxWidth='100%';image.style.objectFit='contain';container.append(image)}
 }

@@ -144,6 +144,7 @@ function recordMetadata(record) {
 
 function renderMeasurements(records) {
   const statuses = { normal: "正常", offline: "オフライン", warning: "警告", error: "エラー" };
+  const powerStates = {NORMAL:'通電・稼働', '0W_ALERT':'0W・機器停止', SWITCH_OFF:'スイッチOFF', OFFLINE:'停電・通信途絶の疑い', BLE_WEAK:'BLE電波弱', NODE_WEAK:'中継器電波弱', UNKNOWN:'未確認'};
   for (const group of document.querySelectorAll("[data-sensor-type]")) {
     const container = group.querySelector(".sensor-records");
     container.replaceChildren();
@@ -156,6 +157,13 @@ function renderMeasurements(records) {
         ? `${record.value.toLocaleString("ja-JP", { maximumFractionDigits: 6 })} ${record.unit || ""}`.trim() : "データなし";
       const status = textElement("span", statuses[record.status] || "不明", `badge ${record.status === "normal" ? "badge-public" : "badge-neutral"}`);
       card.append(textElement("h4", record.name || record.sensor_id), textElement("p", value, "sensor-value"), status, ...recordMetadata(record));
+      if(record.type==='outage'){
+        card.querySelector('.sensor-value').textContent=powerStates[record.power_state]||'未確認';
+        if(record.is_demo)card.prepend(textElement('span','検証用・ダミーデータ','badge badge-error'));
+        card.append(textElement('p',`消費電力: ${['OFFLINE','UNKNOWN'].includes(record.power_state)?'欠損':value} / スイッチ: ${record.switch_on==null?'不明':record.switch_on?'ON':'OFF'}`,'record-meta'));
+        card.append(textElement('p',`BLE: ${record.ble_rssi??'—'} dBm / 中継器: ${record.node_rssi??'—'} dBm`,'record-meta'));
+        if(record.power_state==='OFFLINE')card.append(textElement('p','停電・機器故障・通信途絶の区別はできません','record-meta'));
+      }
       container.append(card);
     }
   }
