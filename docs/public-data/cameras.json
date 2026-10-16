@@ -4,13 +4,13 @@
     "facility_id": "1",
     "name": "カメラ１",
     "type": "camera",
-    "latitude": 34.6507388,
-    "longitude": 133.918072,
+    "latitude": 34.651347,
+    "longitude": 133.920646,
     "image_url": "https://mosa-github.github.io/data_test_server_page/public-data/images/6b86b273ff34fce19d6b804eff5a3f57.jpg",
     "content_type": "image/jpeg",
     "width": 1920,
     "height": 1080,
-    "measured_at": "2026-10-16T19:08:48.858027+09:00",
+    "measured_at": "2026-10-16T21:16:17.716682+09:00",
     "status": "normal"
   },
   {
@@ -18,13 +18,13 @@
     "facility_id": "1",
     "name": "カメラ２",
     "type": "camera",
-    "latitude": 34.6507388,
-    "longitude": 133.918072,
+    "latitude": 34.651347,
+    "longitude": 133.920646,
     "image_url": "https://mosa-github.github.io/data_test_server_page/public-data/images/d4735e3a265e16eee03f59718b9b5d03.jpg",
     "content_type": "image/jpeg",
     "width": 1920,
     "height": 1080,
-    "measured_at": "2026-10-16T19:09:20.625141+09:00",
+    "measured_at": "2026-10-16T21:12:37.285293+09:00",
     "status": "normal"
   }
 ]
