@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-17T05:30:48.261564+09:00",
+  "generated_at": "2026-10-17T05:53:15.133615+09:00",
   "datasets": [
     {
       "id": "latest",
@@ -8,7 +8,7 @@
       "type": "measurement",
       "format": "json",
       "url": "https://mosa-github.github.io/data_test_server_page/public-data/latest.json",
-      "updated_at": "2026-10-17T05:17:22.943013+09:00",
+      "updated_at": "2026-10-17T05:52:18.318670+09:00",
       "sensor_id_field": "sensor_id",
       "facility_id_field": "facility_id",
       "value_field": "value",
@@ -18,7 +18,12 @@
       "coordinate_source": "https://mosa-github.github.io/data_test_server_page/public-data/locations.json",
       "refresh_seconds": 180,
       "timezone": "Asia/Tokyo",
-      "svgmap": true
+      "svgmap": true,
+      "power_state_field": "power_state",
+      "switch_on_field": "switch_on",
+      "ble_rssi_field": "ble_rssi",
+      "node_rssi_field": "node_rssi",
+      "is_demo_field": "is_demo"
     },
     {
       "id": "history",
@@ -26,7 +31,7 @@
       "type": "measurement",
       "format": "csv",
       "url": "https://mosa-github.github.io/data_test_server_page/public-data/history.csv",
-      "updated_at": "2026-10-17T05:17:22.943013+09:00",
+      "updated_at": "2026-10-17T05:52:18.318670+09:00",
       "sensor_id_field": "sensor_id",
       "facility_id_field": "facility_id",
       "value_field": "value",
@@ -36,7 +41,12 @@
       "coordinate_source": "https://mosa-github.github.io/data_test_server_page/public-data/locations.json",
       "refresh_seconds": 180,
       "timezone": "Asia/Tokyo",
-      "svgmap": true
+      "svgmap": true,
+      "power_state_field": "power_state",
+      "switch_on_field": "switch_on",
+      "ble_rssi_field": "ble_rssi",
+      "node_rssi_field": "node_rssi",
+      "is_demo_field": "is_demo"
     },
     {
       "id": "locations",
@@ -63,7 +73,7 @@
       "type": "camera",
       "format": "json",
       "url": "https://mosa-github.github.io/data_test_server_page/public-data/cameras.json",
-      "updated_at": "2026-10-17T05:30:48.261564+09:00",
+      "updated_at": "2026-10-17T05:53:15.133615+09:00",
       "sensor_id_field": "sensor_id",
       "facility_id_field": "facility_id",
       "value_field": "value",

@@ -4,5 +4,11 @@
     "facility_name": "岡山大学病院",
     "latitude": 34.651347,
     "longitude": 133.920646
+  },
+  {
+    "facility_id": "2",
+    "facility_name": "岡山大学（津島キャンパス）",
+    "latitude": 34.6897933,
+    "longitude": 133.9237438
   }
 ]
