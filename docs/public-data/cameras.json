@@ -5,12 +5,12 @@
     "name": "カメラ１",
     "type": "camera",
     "latitude": 34.6507388,
-    "longitude": 133.9158887,
+    "longitude": 133.918072,
     "image_url": "https://mosa-github.github.io/data_test_server_page/public-data/images/6b86b273ff34fce19d6b804eff5a3f57.jpg",
     "content_type": "image/jpeg",
     "width": 1920,
     "height": 1080,
-    "measured_at": "2026-10-16T14:45:55.212443+09:00",
+    "measured_at": "2026-10-16T18:46:27.306736+09:00",
     "status": "normal"
   },
   {
@@ -19,12 +19,12 @@
     "name": "カメラ２",
     "type": "camera",
     "latitude": 34.6507388,
-    "longitude": 133.9158887,
+    "longitude": 133.918072,
     "image_url": "https://mosa-github.github.io/data_test_server_page/public-data/images/d4735e3a265e16eee03f59718b9b5d03.jpg",
     "content_type": "image/jpeg",
     "width": 1920,
     "height": 1080,
-    "measured_at": "2026-10-16T14:46:33.611980+09:00",
+    "measured_at": "2026-10-16T18:45:55.082989+09:00",
     "status": "normal"
   }
 ]
