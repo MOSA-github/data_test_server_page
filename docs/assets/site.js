@@ -159,7 +159,6 @@ function renderMeasurements(records) {
       card.append(textElement("h4", record.name || record.sensor_id), textElement("p", value, "sensor-value"), status, ...recordMetadata(record));
       if(record.type==='outage'){
         card.querySelector('.sensor-value').textContent=powerStates[record.power_state]||'未確認';
-        if(record.is_demo)card.prepend(textElement('span','検証用・ダミーデータ','badge badge-error'));
         card.append(textElement('p',`消費電力: ${['OFFLINE','UNKNOWN'].includes(record.power_state)?'欠損':value} / スイッチ: ${record.switch_on==null?'不明':record.switch_on?'ON':'OFF'}`,'record-meta'));
         card.append(textElement('p',`BLE: ${record.ble_rssi??'—'} dBm / 中継器: ${record.node_rssi??'—'} dBm`,'record-meta'));
         if(record.power_state==='OFFLINE')card.append(textElement('p','停電・機器故障・通信途絶の区別はできません','record-meta'));
