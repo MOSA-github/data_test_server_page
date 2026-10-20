@@ -34,22 +34,22 @@
     {
       "path": "public-data/catalog.json",
       "bytes": 3284,
-      "sha256": "726e65909a116123d52ac3528435531b4e7270825860aebbaa742f0fb82ee80a"
+      "sha256": "891c3a39da9d5e171e76a57cf923f19ab30e2efa762c3636f51391ce98e96332"
     },
     {
       "path": "public-data/latest.json",
       "bytes": 1338,
-      "sha256": "37703e75d27f8787e9397da6bd7e3c2ef177d3962165132e7bb06c6b3761cf0e"
+      "sha256": "79f31986bc6b6923d002f2c1d287b38e4523827da277d3f0ea2d0113f5dfb628"
     },
     {
       "path": "public-data/cameras.json",
       "bytes": 882,
-      "sha256": "00b6a183584f6aeb8c372e8132f2b3a01bfabc44718fcd0d12da83eefef96073"
+      "sha256": "766623e6fadac76972341f6ecacef0bc6be3998a5237eb90bab478fa06a739e3"
     },
     {
       "path": "public-data/history.csv",
-      "bytes": 398871,
-      "sha256": "30c969f9d43cce8e7d27d1939cc59389ba6e8b215a93582cd2c6d852441c482d"
+      "bytes": 408279,
+      "sha256": "ee2cbdc03e86f78ac7c8edc065a99c95a534e1cdfb881841b5dd441d2593d87a"
     },
     {
       "path": "public-data/locations.json",
@@ -58,13 +58,13 @@
     },
     {
       "path": "public-data/images/d4735e3a265e16eee03f59718b9b5d03.jpg",
-      "bytes": 193398,
-      "sha256": "cfe80f86770dfc92949a557a82bdd7934b4ed77b90784454c8ed65e5458c30d4"
+      "bytes": 192951,
+      "sha256": "28492e44a409255b8c3a32aecfdb19c9d9a428c042952f58e15cb6f5a0659b51"
     },
     {
       "path": "public-data/images/6b86b273ff34fce19d6b804eff5a3f57.jpg",
-      "bytes": 129229,
-      "sha256": "0de6708fa9664a58120e41fa72f5b458ee19ba82c3564c78252c94e24d270f75"
+      "bytes": 128344,
+      "sha256": "94be54de08dd185bad76e955fbe331c170736984b6dcd9b8be89f54c0b7c8e34"
     }
   ]
 }
