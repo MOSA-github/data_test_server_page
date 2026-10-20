@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-21T05:11:53.084889+09:00",
+  "generated_at": "2026-10-21T08:11:07.736519+09:00",
   "datasets": [
     {
       "id": "latest",
@@ -8,7 +8,7 @@
       "type": "measurement",
       "format": "json",
       "url": "https://mosa-github.github.io/data_test_server_page/public-data/latest.json",
-      "updated_at": "2026-10-21T05:08:39+09:00",
+      "updated_at": "2026-10-21T08:07:21.954521+09:00",
       "sensor_id_field": "sensor_id",
       "facility_id_field": "facility_id",
       "value_field": "value",
@@ -31,7 +31,7 @@
       "type": "measurement",
       "format": "csv",
       "url": "https://mosa-github.github.io/data_test_server_page/public-data/history.csv",
-      "updated_at": "2026-10-21T05:08:39+09:00",
+      "updated_at": "2026-10-21T08:07:21.954521+09:00",
       "sensor_id_field": "sensor_id",
       "facility_id_field": "facility_id",
       "value_field": "value",
@@ -73,7 +73,7 @@
       "type": "camera",
       "format": "json",
       "url": "https://mosa-github.github.io/data_test_server_page/public-data/cameras.json",
-      "updated_at": "2026-10-21T05:11:53.084889+09:00",
+      "updated_at": "2026-10-21T08:11:07.736519+09:00",
       "sensor_id_field": "sensor_id",
       "facility_id_field": "facility_id",
       "value_field": "value",
