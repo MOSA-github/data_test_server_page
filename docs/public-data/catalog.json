@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-24T23:37:16.499506+09:00",
+  "generated_at": "2026-10-25T02:32:18.342198+09:00",
   "datasets": [
     {
       "id": "latest",
@@ -8,7 +8,7 @@
       "type": "measurement",
       "format": "json",
       "url": "https://mosa-github.github.io/data_test_server_page/public-data/latest.json",
-      "updated_at": "2026-10-24T23:37:16.499506+09:00",
+      "updated_at": "2026-10-25T02:32:18.342198+09:00",
       "sensor_id_field": "sensor_id",
       "facility_id_field": "facility_id",
       "value_field": "value",
@@ -31,7 +31,7 @@
       "type": "measurement",
       "format": "csv",
       "url": "https://mosa-github.github.io/data_test_server_page/public-data/history.csv",
-      "updated_at": "2026-10-24T23:37:16.499506+09:00",
+      "updated_at": "2026-10-25T02:32:18.342198+09:00",
       "sensor_id_field": "sensor_id",
       "facility_id_field": "facility_id",
       "value_field": "value",
