@@ -6,7 +6,7 @@
     "type": "generator",
     "value": 3232.9,
     "unit": "L",
-    "measured_at": "2026-10-27T22:37:24.085616+09:00",
+    "measured_at": "2026-10-28T03:57:18.821131+09:00",
     "status": "normal"
   },
   {
@@ -16,7 +16,7 @@
     "type": "water",
     "value": 45.5,
     "unit": "%",
-    "measured_at": "2026-10-27T22:37:24.085616+09:00",
+    "measured_at": "2026-10-28T03:57:18.821131+09:00",
     "status": "normal"
   },
   {
@@ -26,7 +26,7 @@
     "type": "power",
     "value": 7031.8,
     "unit": "W",
-    "measured_at": "2026-10-27T22:37:24.085616+09:00",
+    "measured_at": "2026-10-28T03:57:18.821131+09:00",
     "status": "normal"
   },
   {
@@ -36,12 +36,12 @@
     "type": "outage",
     "value": null,
     "unit": "W",
-    "measured_at": "2026-10-27T22:30:08+09:00",
+    "measured_at": "2026-10-28T03:50:40+09:00",
     "status": "offline",
     "power_state": "OFFLINE",
     "switch_on": null,
-    "ble_rssi": -53.0,
-    "node_rssi": -60.0,
+    "ble_rssi": -54.0,
+    "node_rssi": -61.0,
     "is_demo": true
   },
   {
@@ -49,9 +49,9 @@
     "facility_id": "2",
     "name": "監視ポイント2",
     "type": "outage",
-    "value": 31.9,
+    "value": 32.1,
     "unit": "W",
-    "measured_at": "2026-10-27T22:30:08+09:00",
+    "measured_at": "2026-10-28T03:56:37+09:00",
     "status": "normal",
     "power_state": "NORMAL",
     "switch_on": true,
