@@ -34,7 +34,7 @@
     {
       "path": "public-data/catalog.json",
       "bytes": 3284,
-      "sha256": "07f9b0078516e9ed3ecb0f7879c234dcd8bf74fd2636db402e08de15c19c2ba6"
+      "sha256": "3178831c8e8a93ff4cc533262151feeb25efde6a1f8e73f1a7540dcbc9608007"
     },
     {
       "path": "public-data/cameras.json",
@@ -44,7 +44,7 @@
     {
       "path": "public-data/latest.json",
       "bytes": 1338,
-      "sha256": "3973fdbc04323a008ac7ffe5e878e95bd6cb1b0f891a0ca10abe7a39a0d6a489"
+      "sha256": "1e6f244fe72291d9255284b6b4eb5f6b4ccb296568a0c966ce7fdabb3aeda3af"
     },
     {
       "path": "public-data/locations.json",
@@ -54,7 +54,7 @@
     {
       "path": "public-data/history.csv",
       "bytes": 426112,
-      "sha256": "f3d82370a4790f3c00a0277425b175795dfcd38c1d1d070bdc5208441d6dd744"
+      "sha256": "e8bc3c76a0eb841ffef785dbc080943d5e05af5242525a9f52c0de46181ded17"
     },
     {
       "path": "public-data/images/d4735e3a265e16eee03f59718b9b5d03.jpg",
